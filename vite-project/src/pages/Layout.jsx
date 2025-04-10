@@ -1,13 +1,14 @@
 // Layout.jsx
 import { Outlet } from 'react-router-dom';
+import { Header } from "../components/Header"
+import { Footer } from "../components/Footer"
+
 
 export function Layout() {
   return (
-    <div>
+    <div className='overflow-x-hidden'>
       {/* Cabeçalho/menu que aparece em todas as páginas */}
-      <header className='flex flex-wrap w-screen h-1/6 bg-neutral-300'>
-      a
-      </header>
+      <Header/>
 
       {/* Área onde as rotas filhas serão renderizadas */}
       <main>
@@ -15,9 +16,7 @@ export function Layout() {
       </main>
 
       {/* Rodapé que aparece em todas as páginas */}
-      <footer className='flex flex-wrap w-screen h-96'>
-        <p>© 2023 Biblioteca Escolar</p>
-      </footer>
+      <Footer/>
     </div>
   );
 }

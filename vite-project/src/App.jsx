@@ -7,15 +7,16 @@ import { PaginaLogin } from './pages/PaginaLogin';
 import { Home } from './pages/Home';
 import { Erro404 } from './pages/Erro404';
 
+
 export function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
+          <Route index element={<PaginaLogin />} />
           
           {/* Rota de login */}
-          <Route path="login" element={<PaginaLogin />} />
+          <Route path="Home" element={<Home />} />
           
           {/* Redirecionamento - agora faz sentido pois temos uma rota "/" */}
           <Route path="inicio" element={<Navigate to="/" replace />} />
