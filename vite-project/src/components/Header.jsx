@@ -1,9 +1,8 @@
 import React, { useState } from "react"
-import Logo from "../../public/Logo.svg"
-import ReinaldoChat from "../../public/ReinaldoChat.svg"
-import User from "../../public/User.svg"
-import UTFPR from "../../public/UTFPR.svg"
-import SpeechBaloon from "../../public/SpeechBaloon.svg"
+import { Reinaldo } from "./Reinaldo/Reinaldo"
+import Logo from ".././images/Logo.svg"
+import User from ".././images/User.svg"
+import UTFPR from ".././images/UTFPR.svg"
 
 export function Header() {
     const [modalChat, setModalChat] = useState(false)
@@ -20,17 +19,7 @@ export function Header() {
           <img src={User} alt="User" />
         </button> 
       </header>
-      <button onClick={()=> {setModalChat(!modalChat)}} className="cursor-pointer absolute -mt-[2.3rem] z-50">
-        <img width={110} src={ReinaldoChat} alt="ReinaldoChat" />
-      </button>
-      {modalChat && (
-  <div
-    className="ml-12 w-[30vw] h-[120px] bg-no-repeat bg-contain bg-center flex items-center justify-center text-center"
-    style={{ backgroundImage: `url(${SpeechBaloon})` }}
-  >
-    <p className="text-black text-sm">Olá! Eu sou o guaxinim 😄</p>
-  </div>
-)}
+    <Reinaldo/>
     </div>
   );
 }

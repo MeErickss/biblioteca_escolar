@@ -1,0 +1,45 @@
+.bubble {
+    position: relative;
+    display: inline-block; /* Importante para ajustar à largura do conteúdo */
+    width: auto;
+    min-width: 10rem;     /* tamanho mínimo inicial pequeno */
+    max-width: 35rem;     /* limite de crescimento */
+    min-height: 3rem;     /* altura mínima */
+    padding: 1.2rem;    
+    background: #ffffff;
+    border-radius: 0.625rem;
+    border: #000000 solid 0.1875rem;
+    margin-left: 5rem;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    word-wrap: break-word; /* quebra palavras longas */
+    white-space: pre-wrap; /* mantém quebras de linha e permite expandir altura */
+  }
+  
+  
+  .bubble:after {
+    content: '';
+    position: absolute;
+    border-style: solid;
+    border-width: 0.9375rem 0.9375rem 0.9375rem 0; /* 15px */
+    border-color: transparent #ffffff;
+    display: block;
+    width: 0;
+    z-index: 1;
+    left: -0.9375rem; /* -15px */
+    top: 1.25rem; /* 20px */
+  }
+  
+  .bubble:before {
+    content: '';
+    position: absolute;
+    border-style: solid;
+    border-width: 1.0625rem 1.0625rem 1.0625rem 0; /* 17px */
+    border-color: transparent #000000;
+    display: block;
+    width: 0;
+    z-index: 0;
+    left: -1.25rem; /* -20px */
+    top: 1.125rem; /* 18px */
+  }
+  

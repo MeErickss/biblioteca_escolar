@@ -16,7 +16,7 @@ export function App() {
           <Route index element={<PaginaLogin />} />
           
           {/* Rota de login */}
-          <Route path="Home" element={<Home />} />
+          <Route path="home" element={<Home />} />
           
           {/* Redirecionamento - agora faz sentido pois temos uma rota "/" */}
           <Route path="inicio" element={<Navigate to="/" replace />} />

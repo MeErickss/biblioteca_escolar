@@ -1,4 +1,4 @@
-import wLogo from "../../public/wLogo.svg"
+import wLogo from ".././images/wLogo.svg"
 
 export function Footer() {
   return (
