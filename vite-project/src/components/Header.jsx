@@ -1,12 +1,9 @@
-import React, { useState } from "react"
 import { Reinaldo } from "./Reinaldo/Reinaldo"
 import Logo from ".././images/Logo.svg"
 import User from ".././images/User.svg"
 import UTFPR from ".././images/UTFPR.svg"
 
 export function Header() {
-    const [modalChat, setModalChat] = useState(false)
-
   return (
     <div className="absolute z-50">
       {/* Cabeçalho/menu que aparece em todas as páginas */}
