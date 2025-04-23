@@ -1,4 +1,5 @@
 import React from 'react';
+import { Books } from "../Books"
 
 
 
@@ -6,7 +7,7 @@ export function Main() {
   return (
     <div className='w-screen h-96'>
       <main className='w-screen px-2 flex flex-wrap justify-center items-center'>
-        <div className='grid grid-rows-2 grid-cols-8 gap-12 text-start'>
+        <div className='w-screen h-[20rem] grid grid-rows-2 grid-cols-8 gap-12 text-start'>
           <h2 className='col-span-3'>Romance</h2>
           <span>Computação</span>
           <span>Química</span>
@@ -15,12 +16,12 @@ export function Main() {
           <span>Geografia</span>
 
           <button className='bg-red-500'>voltar</button>
-          <div>livro1</div>
-          <div>livro2</div>
-          <div>livro3</div>
-          <div>livro4</div>
-          <div>livro5</div>
-          <div>livro6</div>
+          <div><Books autor={"JKROLLING"} genero={"Ficção"} nome={"Harry Potter"}/></div>
+          <div><Books autor={"JKROLLING"} genero={"Ficção"} nome={"Harry Potter"}/></div>
+          <div><Books autor={"JKROLLING"} genero={"Ficção"} nome={"Harry Potter"}/></div>
+          <div><Books autor={"JKROLLING"} genero={"Ficção"} nome={"Harry Potter"}/></div>
+          <div><Books autor={"JKROLLING"} genero={"Ficção"} nome={"Harry Potter"}/></div>
+          <div><Books autor={"JKROLLING"} genero={"Ficção"} nome={"Harry Potter"}/></div>
           <button className='bg-red-500'>ir</button>
           <button>slider</button>
         </div>
