@@ -2,7 +2,7 @@ import Livro from "./Livro.svg"
 
 export function Books({nome, autor, genero}) {
   return (
-    <div className='flex justify-between flex-wrap flex-col w-60 h-[28rem] p-12 rounded-sm bg-neutral-100 shadow-2xl'>
+    <div className='flex justify-between flex-wrap flex-col w-[14rem] h-[25rem] p-12 rounded-sm bg-neutral-100 shadow-2xl'>
         <img src={Livro} alt="livro" />
         <article className="flex flex-col text-start">
             <h2><strong>{nome}</strong></h2>

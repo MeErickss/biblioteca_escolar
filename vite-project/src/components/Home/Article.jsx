@@ -5,7 +5,7 @@ import Ellipse5 from '../../images/Ellipse5.svg'
 
 export function Article() {
   return (
-    <div className='h-96 p-12'>
+    <div className='w-screen h-screen p-12'>
         <article className='h-82 grid grid-rows-1 grid-cols-2'>
           <div className='flex flex-wrap justify-around items-center'>
             <img className='sticky bottom-120 left-90' src={Ellipse4}/>
