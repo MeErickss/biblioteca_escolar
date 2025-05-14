@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import ReinaldoChat from "../../images/ReinaldoChat.svg";
-import { getBookRecommendation } from '../../../server/hugginface_api';
+import { getBookRecommendation } from '../../server/hugginface_api';
 import "./Reinaldo.css";
 
 export function Reinaldo() {
@@ -36,7 +36,7 @@ export function Reinaldo() {
                       onChange={(e) => setInput(e.target.value)}
                       className="min-w-8/12 max-w-full py-2 rounded focus:outline-none border-b-2 border-black border-dotted"
                     />
-                    <button onClick={handleSubmit} className="w-22 cursor-pointer text-sm bg-transparent border-2 border-black text-black py-2 rounded">
+                    <button onClick={handleSubmit} className="w-22 cursor-pointer text-sm bg-transparent border-2 border-black text-black py-2 hover:bg-black hover:text-white transition-colors rounded">
                       Recomendar
                     </button>
             </div>

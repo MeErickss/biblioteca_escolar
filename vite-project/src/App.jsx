@@ -14,10 +14,10 @@ export function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<PaginaLogin />} />
+          <Route index element={<Home />} />
           
           {/* Rota de login */}
-          <Route path="home" element={<Home />} />
+          <Route path="login" element={<PaginaLogin />} />
           <Route path="pesquisa" element={< ResultadoPesquisa/>} />
           
           {/* Redirecionamento - agora faz sentido pois temos uma rota "/" */}

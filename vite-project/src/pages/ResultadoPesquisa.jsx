@@ -3,21 +3,20 @@ import { Article } from "../components/Home/Article"
 import { Main } from "../components/Home/Main"
 import { Populares } from "../components/Home/Populares"
 import { Filtros } from "../components/Home/Filtros"
+import { ArrowLeftOutlined } from '@ant-design/icons';
 
 export function ResultadoPesquisa() {
   return (
-    <div className='flex flex-wrap overflow-hidden justify-center text-center items-center w-screen h-full bg-white p-12'>
-        <div className='flex flex-wrap flex-row w-screen h-screen '>
-            <button className='w-[10rem] h-19 bg-yellow-400'>Voltar</button>
-            <input className='w-[10rem] h-19 bg-neutral-300' type="text" />
-        </div>
-
-        <Filtros></Filtros>
-
-        <div>
-            <h1>Resultados:</h1>
-            <Populares></Populares>
-        </div>
+    <div className='flex flex-wrap overflow-hidden justify-center text-center items-center w-screen h-full bg-white p-100'>
+          <div className='flex flex-row w-full h-screen gap-1'>
+            <button className='w-[8rem] h-19 bg-yellow-400 rounded-2xl'><ArrowLeftOutlined /> Voltar</button>
+            <input className='w-[40rem] h-19 bg-neutral-300 rounded-2xl px-2 text-2xl' type="text" />
+          </div>
+          <Filtros></Filtros>
+          <div>
+              <h1>Resultados:</h1>
+              <Populares></Populares>
+          </div>
     </div>
   );
 }

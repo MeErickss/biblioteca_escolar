@@ -2,6 +2,7 @@ import { Reinaldo } from "./Reinaldo/Reinaldo"
 import Logo from ".././images/Logo.svg"
 import User from ".././images/User.svg"
 import UTFPR from ".././images/UTFPR.svg"
+import { NavLink } from "react-router-dom";
 
 export function Header() {
   return (
@@ -12,9 +13,9 @@ export function Header() {
             <img width={160} src={Logo} alt="Logo"/>
             <img width={360} src={UTFPR} alt="UTFPR" />
         </div>
-        <button className="cursor-pointer">
+        <NavLink to="/login" className="cursor-pointer">
           <img src={User} alt="User" />
-        </button> 
+        </NavLink> 
       </header>
     <Reinaldo/>
     </div>

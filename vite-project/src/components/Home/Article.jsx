@@ -1,6 +1,7 @@
 import ReinaldoOi from '../../images/ReinaldoOi.svg'
 import Ellipse4 from '../../images/Ellipse4.svg'
 import Ellipse5 from '../../images/Ellipse5.svg'
+import { SearchOutlined } from '@ant-design/icons';
 
 
 export function Article() {
@@ -11,7 +12,10 @@ export function Article() {
             <img className='sticky bottom-120 left-90' src={Ellipse4}/>
             <img className='sticky bottom-75' src={Ellipse5}/>
             <h2 className='w-96 text-3xl'><strong>Criando hoje a tecnologia que transforma o amanhã</strong></h2>
-            <input className='relative w-9/12 h-14 border-b-2 border-neutral-500 focus:outline-none' type="text" placeholder='Pesquisar' />
+            <div className='w-full'>
+              <SearchOutlined className='pr-2'/>
+              <input className='relative w-9/12 h-14 border-b-2 border-neutral-500 focus:outline-none' type="text" placeholder='Pesquisar' />
+            </div>
           </div>
           <img className='mb-2' width={450} src={ReinaldoOi}/>
         </article>

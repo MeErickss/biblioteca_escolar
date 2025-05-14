@@ -1,10 +1,10 @@
 import 'dotenv/config';
-import express from 'express';
+import express from 'express'
 import pkg from 'pg';
 import cors from 'cors';
 
 const { Pool } = pkg;
-const app = express();
+const app = express()
 
 app.use(cors());
 app.use(express.json());
@@ -29,11 +29,11 @@ app.listen(PORT, () => {
   console.log(`Banco de dados configurado: ${process.env.DATABASE_URL?.split('@')[1]?.split('/')[0] || 'URL não disponível'}`);
 });
 
-app.get('/api/cargo', async (req, res) => {
+app.get('/api/locatorio', async (req, res) => {
     let client;
     try {
       client = await pool.connect();
-      const result = await client.query('SELECT * FROM cargo');
+      const result = await client.query('SELECT * FROM locatorio');
       
       // Retorna os resultados como JSON
       res.json(result.rows);
@@ -48,4 +48,25 @@ app.get('/api/cargo', async (req, res) => {
     } finally {
       if (client) client.release(); // Libera a conexão de volta para o pool
     }
-  });
+});
+
+app.get('/api/livros', async (req, res) => {
+  let client;
+  try {
+    client = await pool.connect();
+    const result = await client.query('SELECT * FROM livro');
+    
+    // Retorna os resultados como JSON
+    res.json(result.rows);
+    
+  } catch (err) {
+    console.error('Erro ao buscar cargos:', err);
+    res.status(500).json({
+      success: false,
+      error: 'Erro ao buscar cargos no banco de dados'
+    });
+    
+  } finally {
+    if (client) client.release(); // Libera a conexão de volta para o pool
+  }
+});
