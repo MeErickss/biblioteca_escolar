@@ -42,9 +42,15 @@ export function Main() {
         </div>
 
         {/* Barra de progresso */}
-        <div className="relative h-2 bg-gray-300 rounded overflow-hidden w-1/2 mt-4">
-          <div className="absolute top-0 left-0 h-full w-1/4 bg-yellow-500"></div>
+        <div className="relative bg-gray-300 overflow-hidden rounded w-1/2 h-2 mt-4">
+         {/* 1ª camada (fundo) */}
+         <div className="absolute inset-0 bg-gray-400 z-10"></div>
+
+         {/* 2ª camada (barra amarela) sobreposta */}
+         <div className="absolute top-0 left-0 h-[1.5rem] w-1/4 bg-yellow-500 z-20"></div>
         </div>
+
+
 
       </main>
     </div>
