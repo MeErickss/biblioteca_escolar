@@ -29,11 +29,16 @@ app.listen(PORT, () => {
   console.log(`Banco de dados configurado: ${process.env.DATABASE_URL?.split('@')[1]?.split('/')[0] || 'URL não disponível'}`);
 });
 
-app.get('/api/locatorio', async (req, res) => {
+app.get('/api/select', async (req, res) => {
+  const map = {
+    locatorio:"SELECT * FROM locatorio",
+    livros:"SELECT * FROM locatorio"
+  }
     let client;
+    const { table } = req.body
     try {
       client = await pool.connect();
-      const result = await client.query('SELECT * FROM locatorio');
+      const result = await client.query(map[table]);
       
       // Retorna os resultados como JSON
       res.json(result.rows);
@@ -50,23 +55,69 @@ app.get('/api/locatorio', async (req, res) => {
     }
 });
 
-app.get('/api/livros', async (req, res) => {
+
+app.post('/api/insert', async (req, res) => {
+  const map = {
+    autor:"INSERT INTO autor (nome, senha) VALUES ($1, $2);"
+  }
+  const { login, senha, table } = req.body;
+  console.log(login, senha , table)
   let client;
+
   try {
     client = await pool.connect();
-    const result = await client.query('SELECT * FROM livro');
-    
-    // Retorna os resultados como JSON
-    res.json(result.rows);
-    
-  } catch (err) {
-    console.error('Erro ao buscar cargos:', err);
-    res.status(500).json({
-      success: false,
-      error: 'Erro ao buscar cargos no banco de dados'
+
+    const sqlText = map[table];
+
+
+    await client.query(sqlText, [login, senha]);
+
+
+    return res.status(201).json({
+      success: true,
     });
-    
+
+  } catch (err) {
+    console.error('Erro ao inserir autor:', err);
+    return res.status(500).json({
+      success: false,
+      error: 'Erro ao inserir autor no banco de dados'
+    });
+
   } finally {
-    if (client) client.release(); // Libera a conexão de volta para o pool
+    if (client) client.release();
+  }
+});
+
+app.delete('/api/delete', async (req, res) => {
+  const map = {
+    autor:"UPDATE autor SET ativo = false WHERE nome = $1"
+  }
+
+  const { table, nome } = req.body;
+  let client;
+
+  try {
+    client = await pool.connect();
+
+    const sqlText = map[table];
+
+
+    await client.query(sqlText, [nome]);
+
+
+    return res.status(201).json({
+      success: true,
+    });
+
+  } catch (err) {
+    console.error('Erro ao inserir autor:', err);
+    return res.status(500).json({
+      success: false,
+      error: 'Erro ao inserir autor no banco de dados'
+    });
+
+  } finally {
+    if (client) client.release();
   }
 });

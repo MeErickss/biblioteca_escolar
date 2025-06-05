@@ -7,6 +7,7 @@ import { PaginaLogin } from './pages/PaginaLogin';
 import { Home } from './pages/Home';
 import { Erro404 } from './pages/Erro404';
 import { ResultadoPesquisa } from './pages/ResultadoPesquisa';
+import { Cadastro } from './pages/Cadastro';
 
 
 export function App() {
@@ -19,6 +20,8 @@ export function App() {
           {/* Rota de login */}
           <Route path="login" element={<PaginaLogin />} />
           <Route path="pesquisa" element={< ResultadoPesquisa/>} />
+          <Route path="cadastro" element={< Cadastro/>} />
+
           
           {/* Redirecionamento - agora faz sentido pois temos uma rota "/" */}
           <Route path="inicio" element={<Navigate to="/" replace />} />

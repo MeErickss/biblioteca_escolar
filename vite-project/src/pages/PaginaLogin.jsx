@@ -94,8 +94,8 @@ export function PaginaLogin() {
 
     <div className="flex flex-wrap justify-center items-center w-screen h-screen bg-white">
       {!loading ? ( <>
-              <img className="fixed top-[2rem] right-[2rem]" src={Ellipse1} />
-              <img className="fixed bottom-[7rem] left-[0rem]" src={Ellipse2} />
+              <img className="fixed bottom-[25rem] right-[2rem]" src={Ellipse1} />
+              <img className="fixed bottom-[7rem] right-[55rem]" src={Ellipse2} />
               <img className="fixed bottom-[-22rem] right-[2rem]" src={Ellipse3} />
               <div className="flex flex-wrap flex-col gap-18 justify-center items-center text-center w-4/12 h-9/12 rounded-2xl bg-neutral-50 opacity-75">
                 <header className='w-full text-5xl'><strong>Bibliotecário</strong></header>
