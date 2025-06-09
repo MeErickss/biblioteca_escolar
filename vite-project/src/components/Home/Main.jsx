@@ -12,7 +12,7 @@ export function Main() {
     const fetchLivros = async () => {
       try {
         setLoading(true);
-        const response = await axios.get("http://localhost:5000/api/select", "livros");
+        const response = await axios.get("http://localhost:5000/api/select?table=livros");
         setDados(response.data);
         console.log(response.data)
       } catch (err) {
@@ -74,7 +74,7 @@ export function Main() {
           className="flex flex-col justify-between w-[14rem] h-[29rem] p-4 rounded-2xl bg-neutral-100 shadow-lg"
           onClick={()=>console.log("a")}
         >
-          <img src={item.url_capa} alt="Capa do livro" className="mb-4 w-[12rem] h-[16rem]" />
+          <img src={`https://covers.openlibrary.org/b/isbn/${item.isbn}-S.jpg`} alt="Capa do livro" className="mb-4 w-[12rem] h-[16rem]" />
           <article className="flex flex-col flex-1 text-start">
             <h2 className="text-lg font-bold mb-2">{item.titulo}</h2>
             <span className="text-sm mb-1">Autor: {item.autor}</span>

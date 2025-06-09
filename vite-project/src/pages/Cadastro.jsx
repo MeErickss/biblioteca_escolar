@@ -1,60 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 export function Cadastro() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Estado para armazenar login, senha e confirmação de senha
-  const [cadastro, setCadastro] = useState({
-    login: "",
-    senha: "",
-    resenha: ""
-  });
+  const [cadastroCrud, setCadastroCrud] = useState();
 
-  // Atualiza o campo correspondente em `cadastro` quando o usuário digita
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setCadastro((prev) => ({
-      ...prev,
-      [name]: value
-    }));
+  const [cadastroTable, setCadastroTable] = useState();
+
+  const [tabelas, setTabelas] = useState([]);
+
+  // Busca os nomes das tabelas ao carregar o componente
+  useEffect(() => {
+    const fetchTables = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/api/tables");
+        setTabelas(res.data);
+      } catch (err) {
+        console.error("Erro ao buscar tabelas:", err);
+        setError("Erro ao buscar tabelas do banco.");
+      }
+    };
+    fetchTables();
+  }, []);
+
+  const handleChangeTable =   (e) => {
+    setCadastroTable(e)
   };
 
-  // Função disparada ao clicar em “Cadastrar”
+  const handleChangeCrud = (e) => {
+    setCadastroCrud(e)
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
-
-    // Validações simples
-    if (!cadastro.login.trim()) {
-      setError("O campo 'login' não pode ficar vazio.");
-      return;
-    }
-
-    if (cadastro.senha.length < 4) {
-      setError("A senha deve ter pelo menos 4 caracteres.");
-      return;
-    }
-
-    if (cadastro.senha !== cadastro.resenha) {
-      setError("As senhas não conferem.");
-      return;
-    }
-
+  
     try {
       setLoading(true);
-      await axios.post("http://localhost:5000/api/insert", {
-        login: cadastro.login,
-        senha: cadastro.senha,
-        table: "autor"
-      });
+      await axios.get("http://localhost:5000/api/tables");
       alert("Cadastro feito com sucesso!");
-      setCadastro({
-        login: "",
-        senha: "",
-        resenha: ""
-      });
     } catch (err) {
       console.error("Erro no cadastro:", err);
       setError("Não foi possível concluir o cadastro. Tente novamente mais tarde.");
@@ -62,6 +48,7 @@ export function Cadastro() {
       setLoading(false);
     }
   };
+  
 
   return (
     <div className="w-screen min-h-screen bg-white flex justify-center items-start pt-40">
@@ -69,7 +56,39 @@ export function Cadastro() {
         className="w-full max-w-md bg-gray-50 p-8 rounded-lg shadow-md"
         onSubmit={handleSubmit}
       >
-        <h2 className="text-2xl font-semibold mb-6">Cadastro de Usuário</h2>
+        <h2 className="text-2xl font-semibold mb-6">Cadastro de {cadastroTable.charAt(0).toUpperCase() + cadastroTable.slice(1).toLowerCase() || "Tabela"}</h2>
+
+        {/* Select de tabelas */}
+        <label className="block mb-2" htmlFor="table">
+          Selecione a tabela:
+        </label>
+        <select
+          id="table"
+          name="table"
+          value={cadastroTable}
+          onChange={(e)=> handleChangeTable(e.target.value)}
+          className="w-1/2 border border-gray-300 px-3 py-2 rounded mb-4"
+        >
+          <option value="">-- Escolha uma tabela --</option>
+          {tabelas.map((tabela) => (
+            <option key={tabela} value={tabela}>
+              {tabela}
+            </option>
+          ))}
+        </select>
+
+        <select
+          id="table"
+          name="table"
+          value={cadastroCrud}
+          onChange={(e)=> handleChangeCrud(e.target.value)}
+          className="w-1/2 border border-gray-300 px-3 py-2 rounded mb-4"
+        >
+          <option value="">-- Escolha um CRUD --</option>
+          <option value="delete"> DELETE </option>
+          <option value="insert"> INSERT </option>
+          <option value="update"> UPDATE </option>
+        </select>
 
         {error && (
           <div className="mb-4 text-red-600">
@@ -77,54 +96,12 @@ export function Cadastro() {
           </div>
         )}
 
-        {/* Login */}
-        <label className="block mb-2" htmlFor="login">
-          Insira o login:
-        </label>
-        <input
-          id="login"
-          name="login"
-          type="text"
-          placeholder="Digite seu login"
-          className="w-full border border-gray-300 px-3 py-2 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-blue-300"
-          value={cadastro.login}
-          onChange={handleChange}
-        />
-
-        {/* Senha */}
-        <label className="block mb-2" htmlFor="senha">
-          Insira a senha:
-        </label>
-        <input
-          id="senha"
-          name="senha"
-          type="password"
-          placeholder="Digite sua senha"
-          className="w-full border border-gray-300 px-3 py-2 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-blue-300"
-          value={cadastro.senha}
-          onChange={handleChange}
-        />
-
-        {/* Resenha */}
-        <label className="block mb-2" htmlFor="resenha">
-          Redigite a senha:
-        </label>
-        <input
-          id="resenha"
-          name="resenha"
-          type="password"
-          placeholder="Redigite a senha"
-          className="w-full border border-gray-300 px-3 py-2 rounded mb-6 focus:outline-none focus:ring-2 focus:ring-blue-300"
-          value={cadastro.resenha}
-          onChange={handleChange}
-        />
-
         <button
           type="submit"
           disabled={loading}
           className={`w-full py-2 rounded-lg text-white ${
             loading ? 'bg-gray-400' : 'bg-blue-600 hover:bg-blue-700'
-          } focus:outline-none`}
+          }`}
         >
           {loading ? 'Cadastrando...' : 'Cadastrar'}
         </button>
