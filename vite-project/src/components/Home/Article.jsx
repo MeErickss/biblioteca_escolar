@@ -14,7 +14,7 @@ export function Article() {
             <h2 className='w-96 text-3xl'><strong>Criando hoje a tecnologia que transforma o amanhã</strong></h2>
             <div className='w-full'>
               <SearchOutlined className='pr-2'/>
-              <input className='relative w-9/12 h-14 border-b-2 border-neutral-500 focus:outline-none' type="text" placeholder='Pesquisar' />
+              <input className='relative w-9/12 h-14 border-b-2 border-neutral-500 focus:outline-none' type="text" placeholder='Pesquisar...' />
             </div>
           </div>
           <img className='mb-2' width={450} src={ReinaldoOi}/>
