@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import ReinaldoChat from "../../images/ReinaldoChat.svg";
-import { getBookRecommendation } from '../../server/hugginface_api';
+import { getBookRecommendation } from '../../../server/hugginface_api';
 import "./Reinaldo.css";
 
 export function Reinaldo() {

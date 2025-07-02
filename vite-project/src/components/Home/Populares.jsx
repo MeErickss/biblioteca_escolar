@@ -12,7 +12,7 @@ export function Populares() {
     const fetchLivros = async () => {
       try {
         setLoading(true);
-        const response = await axios.get("http://localhost:5000/api/tables");
+        const response = await axios.get("http://localhost:5000/api/select",{params:{table:"livro"}});
         setDados(response.data);
         console.log(response.data)
       } catch (err) {

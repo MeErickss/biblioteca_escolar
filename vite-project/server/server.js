@@ -65,7 +65,8 @@ app.get('/api/select', async (req, res) => {
     emprestimo:"SELECT * FROM emprestimo;",
     livro:"SELECT * FROM livro;",
     locatorio:"SELECT * FROM locatorio;",
-    subcategoria:"SELECT * FROM subcategoria;"
+    subcategoria:"SELECT * FROM subcategoria;",
+    populares:"SELECT * FROM livro l WHERE id < 10"
   }
 
     let client;
