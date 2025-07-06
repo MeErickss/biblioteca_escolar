@@ -11,7 +11,6 @@ export function Header() {
   const navigate = useNavigate();
   return (
     <div className="absolute z-50">
-      {/* Cabeçalho/menu que aparece em todas as páginas */}
       <header className='flex flex-wrap justify-between px-16 py-4 w-[99vw] h-1/6 bg-neutral-300'>
         <div className="flex flex-row gap-12">
             <img onClick={() => navigate("/")} width={160} src={Logo} alt="Logo"/>
@@ -30,7 +29,8 @@ export function Header() {
           </NavLink>
         </div>
       </header>
-    <Reinaldo/>
+
+      <Reinaldo />
     </div>
   );
 }
