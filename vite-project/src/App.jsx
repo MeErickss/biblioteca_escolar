@@ -9,6 +9,7 @@ import { Erro404 } from './pages/Erro404';
 import { ResultadoPesquisa } from './pages/ResultadoPesquisa';
 import { Cadastro } from './pages/Cadastro';
 import { PesquisaFiltro } from './pages/PesquisaFiltro';
+import { DetalhesLivro } from './pages/DetalhesLivro';
 
 
 export function App() {
@@ -20,9 +21,10 @@ export function App() {
           
           {/* Rota de login */}
           <Route path="login" element={<PaginaLogin />} />
-          <Route path="pesquisa" element={< ResultadoPesquisa/>} />
-          <Route path="filtro" element={< PesquisaFiltro/>} />
+          <Route path="pesquisa/:pesquisa" element={< ResultadoPesquisa/>} />
+          <Route path="filtro/:descricao" element={< PesquisaFiltro/>} />
           <Route path="cadastro" element={< Cadastro/>} />
+          <Route path="detalhes" element={< DetalhesLivro/>} />
         
           {/* Redirecionamento - agora faz sentido pois temos uma rota "/" */}
           <Route path="inicio" element={<Navigate to="/" replace />} />

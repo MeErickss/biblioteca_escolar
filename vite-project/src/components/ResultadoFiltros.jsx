@@ -1,93 +1,112 @@
-import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import React, { useEffect, useState } from 'react';
-import loadingGif from "../images/loading.gif";
+import { LeftOutlined, RightOutlined } from '@ant-design/icons';
+import loadingGif from '../images/loading.gif';
+import reinaldo from '../images/reinaldo.svg'
 import axios from 'axios';
 
-export function ResultadoFiltros() {
+export function ResultadoFiltros({ tipo = '' }) {
   const [dados, setDados] = useState([]);
+  const [term, setTerm] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchLivros = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get("http://localhost:5000/api/select",{params:{table:"livro"}});
-        setDados(response.data);
-        console.log(response.data)
-      } catch (err) {
-        console.error("Erro ao buscar livros:", err);
-        setError(err);
-      } finally {
-        setLoading(false);
-      }
-    };
+  // Título capitalizado com fallback
+  const displayType = tipo
+    ? tipo.charAt(0).toUpperCase() + tipo.slice(1)
+    : '';
 
-    fetchLivros();
-  }, []);
+  const fetchLivros = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`http://localhost:5000/api/filter/${tipo}`, {
+        params: { term }
+      });
+      setDados(response.data);
+    } catch (err) {
+      console.error('Erro ao buscar livros:', err);
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    // Quando o tipo muda, limpa termo e dados, e faz chamada inicial
+    setTerm('');
+    setDados([]);
+    if (tipo) fetchLivros();
+  }, [tipo]);
+
+  if (!tipo) {
+    return (
+      <div className='text-center text-gray-500'>
+        <img src={reinaldo}/>
+      </div>
+    );
+  }
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        <img src={loadingGif} alt="Carregando..." />
+      <div className='flex justify-center items-center w-full'>
+        <img src={loadingGif} alt='Carregando...' />
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="text-red-500 text-center mt-4">
+      <div className='text-red-500 text-center mt-4'>
         <p>Ocorreu um erro ao carregar os livros. Tente novamente mais tarde.</p>
       </div>
     );
   }
 
-
   return (
-    <div className='w-11/12 min-h-screen bg-white'>
-      <main className='px-4 py-6 flex flex-col items-center gap-10'>
-        <h1 className='text-5xl'><strong>Resultados:</strong></h1>
-        {/* Livros + botões centralizados verticalmente */}
-        <div className='relative w-full flex items-center justify-center'>
+    <div className='w-full max-w-5xl'>
+      <h1 className='text-3xl font-bold mb-4'>Resultados: {displayType}</h1>
 
-          {/* Botão Esquerdo */}
-          <button className='absolute left-0 z-10 p-3 rounded-full text-black'>
-            <LeftOutlined />
-          </button>
+      {/* Campo de busca */}
+      <div className='flex gap-2 mb-6'>
+        <input
+          type='text'
+          value={term}
+          onChange={(e) => setTerm(e.target.value)}
+          className='border border-gray-300 rounded px-3 py-1 flex-1'
+          placeholder={`Pesquisar por ${tipo}...`}
+        />
+        <button onClick={fetchLivros} className='bg-yellow-500 text-white px-4 py-1 rounded'>Buscar</button>
+      </div>
 
-          {/* Grid com 2 linhas e 4 colunas */}
-          <div className='grid grid-cols-5 grid-rows-1 gap-10 px-12 py-4'>
-      {dados.map((item) => (
-        <div
-          key={item.id}
-          className="flex flex-col justify-between w-[14rem] h-[29rem] p-4 rounded-2xl bg-neutral-100 shadow-lg"
-          onClick={()=>console.log("a")}
-        >
-          <img src={item.caminho_imagem} alt="Capa do livro" className="mb-4 w-[12rem] h-[16rem]" />
-          <article className="flex flex-col flex-1 text-start">
-            <h2 className="text-sm font-bold mb-2">{item.titulo}</h2>
-            <span className="text-sm mb-1">Autor: {item.autor}</span>
-            <span className="text-sm">Ano: {item.ano}</span>
-          </article>
+      {/* Grid de resultados com botões de navegação */}
+      <div className='relative'>
+        <button className='absolute left-0 top-1/2 transform -translate-y-1/2 p-3 rounded-full bg-white shadow'>
+          <LeftOutlined />
+        </button>
+        <div className='grid grid-cols-4 gap-6'>
+          {dados.length > 0 ? (
+            dados.map(item => (
+              <div
+                key={item.id}
+                className='flex flex-col justify-between p-4 bg-neutral-100 rounded-2xl shadow-lg cursor-pointer'
+              >
+                <img
+                  src={item.caminho_imagem}
+                  alt={item.titulo}
+                  className='w-full h-64 object-cover mb-4 rounded'
+                />
+                <h2 className='text-lg font-bold'>{item.titulo}</h2>
+                <p className='text-sm'>Autor: {item.autor}</p>
+                <p className='text-sm'>Ano: {item.ano}</p>
+              </div>
+            ))
+          ) : (
+            <p className='col-span-4 text-center text-gray-500'>Nenhum livro encontrado.</p>
+          )}
         </div>
-      ))}
-      {dados.length === 0 && !loading && (
-        <p className="text-gray-500">Nenhum livro encontrado.</p>
-      )}
-    </div>
-
-          {/* Botão Direito */}
-          <button className='absolute right-0 z-10 p-3 rounded-full text-black'>
-            <RightOutlined />
-          </button>
-        </div>
-
-        {/* Barra de progresso */}
-        <div className="relative h-2 bg-gray-300 rounded overflow-hidden w-1/2 mt-4">
-          <div className="absolute top-0 left-0 h-full w-1/4 bg-yellow-500"></div>
-        </div>
-
-      </main>
+        <button className='absolute right-0 top-1/2 transform -translate-y-1/2 p-3 rounded-full bg-white shadow'>
+          <RightOutlined />
+        </button>
+      </div>
     </div>
   );
 }
