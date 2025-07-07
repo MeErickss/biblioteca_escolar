@@ -67,22 +67,30 @@ export function Cadastro() {
   }, [toInsert, cadastroTable]);
 
   return (
-    <div className="p-12">
-      <h1 className="text-3xl mb-4">
-        Cadastro de <span className="capitalize">{cadastroTable || '...'}</span>
-      </h1>
+    <div className="mt-12 p-12">
+
       {error && <p className="text-red-600">{error}</p>}
 
-      <div className="flex justify-center items-center w-full gap-4">
-        <span className="font-bold text-black text-xl">Selecione uma Tabela: </span>
-        <select
-          value={cadastroTable}
-          onChange={e => setCadastroTable(e.target.value)}
-          className="border p-2 rounded"
-        >
-          <option value="">-- selecione --</option>
-          {tabelas.map(t => <option key={t} value={t}>{t}</option>)}
-        </select>
+      <h1 className="text-3xl mb-4 text-center">
+        Cadastro de <span className="capitalize">{cadastroTable || '...'}</span>
+      </h1>
+      <div className="flex flex-row justify-evenly items-center w-full gap-4">
+
+        <div>
+          <span className="font-bold text-black text-xl">Selecione uma Tabela: </span>
+          <select
+            value={cadastroTable}
+            onChange={e => setCadastroTable(e.target.value)}
+            className="border p-2 rounded"
+          >
+            <option value="">-- selecione --</option>
+            {tabelas.map(t => <option key={t} value={t}>{t}</option>)}
+          </select>
+        </div>
+        <div>
+          <label className="text-xl font-bold " htmlFor="">Pesquisa: </label>
+          <input className="border rounded-sm p-2" type="text" placeholder="Pesquisa..."/>
+        </div>
       </div>
 
       {cadastroTable && (

@@ -1,5 +1,6 @@
 // src/components/CadastroForm.jsx
 import React, { useState, useEffect } from "react";
+import { PlusOutlined, EditFilled, DeleteFilled } from "@ant-design/icons";
 
 export function CadastroForm({ rows, onDelete, onUpdate, onInsert, loading }) {
   const [editableRows, setEditableRows] = useState([]);
@@ -49,8 +50,7 @@ export function CadastroForm({ rows, onDelete, onUpdate, onInsert, loading }) {
 
   return (
     <div className="bg-white rounded-xl p-6 shadow-lg">
-      <h2 className="text-2xl font-semibold mb-6 text-center">Cadastro</h2>
-      <div className="space-y-4">
+      <div className="space-y-4 bg-neutral-300 p-8 rounded-lg ">
 
         {/* Linhas existentes */}
         {editableRows.map((item, idx) => (
@@ -80,7 +80,7 @@ export function CadastroForm({ rows, onDelete, onUpdate, onInsert, loading }) {
                     className={
                       (col === 'id'
                         ? 'bg-gray-100 cursor-not-allowed'
-                        : 'border-gray-300 focus:ring-indigo-500') +
+                        : 'border-black bg-white focus:ring-blue-500') +
                       ' border rounded-md p-2 focus:outline-none focus:ring-2 w-full'
                     }
                   />
@@ -96,12 +96,12 @@ export function CadastroForm({ rows, onDelete, onUpdate, onInsert, loading }) {
                   disabled={loading}
                   onClick={() => onUpdate(editableRows[idx])}
                   className="p-1 hover:text-green-600"
-                >✅</button>
+                ><EditFilled style={{ color: 'orange' }}/></button>
                 <button
                   disabled={loading}
                   onClick={() => onDelete(item.id)}
                   className="p-1 hover:text-red-600"
-                >🗑</button>
+                ><DeleteFilled style={{ color: 'red' }} /></button>
               </div>
             </div>
           </div>
@@ -143,7 +143,7 @@ export function CadastroForm({ rows, onDelete, onUpdate, onInsert, loading }) {
                 disabled={loading}
                 onClick={() => submitNew(i)}
                 className="p-1 hover:text-green-600"
-              >➕</button>
+              ><PlusOutlined style={{ color: 'green' }} /></button>
             </div>
           </div>
         ))}
