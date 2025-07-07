@@ -3,7 +3,7 @@ export async function getBookRecommendation(prompt) {
   const response = await fetch("https://api-inference.huggingface.co/pipeline/text-generation/tiiuae/falcon-7b-instruct", {
     method: "POST",
     headers: {
-      "Authorization": `Bearer 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`,
+      "Authorization": `Bearer `,
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
