@@ -56,7 +56,7 @@ export function Home() {
     <div className='flex flex-wrap overflow-hidden justify-center text-center items-center w-screen h-full bg-white p-12'>
       <Article handlePesquisa={handlePesquisa}></Article>
       <Main dados={dados} loading={loading} error={error}></Main>
-      <Filtros filtros={["Autor", "Titulo", "Categoria"]}></Filtros>
+      <Filtros filtros={["Psicologia", "Medicina", "Arquitetura"]}></Filtros>
       <Populares></Populares>
     </div>
   );

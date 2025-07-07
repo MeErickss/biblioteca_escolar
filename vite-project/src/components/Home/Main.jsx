@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import loadingGif from "../../images/loading.gif";
-import { Filtros } from './Filtros';
 
 export function Main({ dados, setDados, loading, error }) {
 
@@ -23,15 +22,8 @@ export function Main({ dados, setDados, loading, error }) {
   return (
     <div className="w-screen min-h-screen bg-white">
       <main className="px-4 py-6 flex flex-col items-center gap-10">
-        {/* Linha dos gêneros */}
-        <Filtros filtros={["Romance","Computação","Química","Física","História","Geografia","Outro"]}  />
-
         {/* Livros + botões */}
         <div className="relative w-full max-w-7xl flex items-center justify-center">
-          {/* Botão Esquerdo */}
-          <button className="absolute left-0 top-1/2 -translate-y-1/2 p-3 bg-transparent text-black">
-            <LeftOutlined />
-          </button>
 
           {/* Grid com 5 colunas (ajuste pra 4x2 se quiser) */}
           <div className="grid grid-cols-5 gap-6 px-12 py-4">
@@ -61,17 +53,6 @@ export function Main({ dados, setDados, loading, error }) {
               </p>
             )}
           </div>
-
-          {/* Botão Direito */}
-          <button className="absolute right-0 top-1/2 -translate-y-1/2 p-3 bg-transparent text-black">
-            <RightOutlined />
-          </button>
-        </div>
-
-        {/* Barra de progresso */}
-        <div className="relative bg-gray-300 overflow-hidden rounded w-1/2 h-2 mt-4">
-          <div className="absolute inset-0 bg-gray-400"></div>
-          <div className="absolute top-0 left-0 h-full w-1/4 bg-yellow-500"></div>
         </div>
       </main>
     </div>

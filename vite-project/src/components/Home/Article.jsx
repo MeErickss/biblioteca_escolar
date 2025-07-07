@@ -23,8 +23,8 @@ export function Article({ handlePesquisa }) {
   };
 
   return (
-    <div className='w-screen h-screen p-12'>
-      <article className='h-82 grid grid-rows-1 grid-cols-2'>
+    <div className='w-screen h-1/2 p-12'>
+      <article className='w-full grid grid-rows-1 grid-cols-2'>
         <div className='flex flex-wrap justify-around items-center'>
           <img className='sticky bottom-120 left-90' src={Ellipse4} alt="Ellipse 4" />
           <img className='sticky bottom-75' src={Ellipse5} alt="Ellipse 5" />

@@ -4,7 +4,7 @@ import User from ".././images/User.svg"
 import UTFPR from ".././images/UTFPR.svg"
 import { NavLink } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
-import { FormOutlined } from "@ant-design/icons";
+import { FormOutlined, HistoryOutlined } from "@ant-design/icons";
 
 
 export function Header() {
@@ -18,7 +18,11 @@ export function Header() {
         </div>
         <div className="flex flex-row justify-center items-center">
           {localStorage.getItem('login') && (
-            <div className="w-18">
+            <div className="flex flex-row gap-8 w-34">
+              <NavLink to="/emprestimos" className="cursor-pointer">
+                <HistoryOutlined style={{ fontSize: '40px' }} />
+              </NavLink>
+
               <NavLink to="/cadastro" className="cursor-pointer">
                 <FormOutlined style={{ fontSize: '40px' }} />
               </NavLink>

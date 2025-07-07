@@ -54,7 +54,7 @@ export function PaginaLogin() {
   const verifyCredentials = (users, { login, senha }) => {
     const user = users.find(u => u.email === login);
     if (!user) return false;
-    return user.senha === senha;
+    return [user.senha === senha, user.id];
   };
 
   const handleLogin = () => {
@@ -66,8 +66,10 @@ export function PaginaLogin() {
 
     // verifica credenciais
     const valid = verifyCredentials(locatorios, inputValues);
-    if (valid) {
+    if (valid[0]) {
       localStorage.setItem('login', true)
+      localStorage.setItem('idLogin', valid[1])
+      console.log(localStorage.getItem('idLogin'))
       navigate('/');
     } else {
       setAuthError(true);

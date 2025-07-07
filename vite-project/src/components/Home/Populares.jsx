@@ -50,11 +50,6 @@ export function Populares() {
         {/* Livros + botões centralizados verticalmente */}
         <div className='relative w-full max-w-7xl flex items-center justify-center'>
 
-          {/* Botão Esquerdo */}
-          <button className='absolute left-0 z-10 p-3 rounded-full text-black'>
-            <LeftOutlined />
-          </button>
-
           {/* Grid com 2 linhas e 4 colunas */}
           <div className='grid grid-cols-5 grid-rows-1 gap-6 px-12 py-4'>
       {dados.map((item) => (
@@ -75,18 +70,7 @@ export function Populares() {
         <p className="text-gray-500">Nenhum livro encontrado.</p>
       )}
     </div>
-
-          {/* Botão Direito */}
-          <button className='absolute right-0 z-10 p-3 rounded-full text-black'>
-            <RightOutlined />
-          </button>
         </div>
-
-        {/* Barra de progresso */}
-        <div className="relative h-2 bg-gray-300 rounded overflow-hidden w-1/2 mt-4">
-          <div className="absolute top-0 left-0 h-full w-1/4 bg-yellow-500"></div>
-        </div>
-
       </main>
     </div>
   );

@@ -82,6 +82,42 @@ app.get('/api/livro/:id', async (req, res) => {
   }
 });
 
+app.get('/api/emprestimos/:locatorioId', async (req, res) => {
+  const { locatorioId } = req.params;
+
+  const sql = `
+    SELECT
+      e.id                                               AS id,
+      l.titulo                                           AS livro,
+      to_char(e.data_emprestimo,         'DD/MM/YYYY')   AS dataEmprestimo,
+      to_char(e.data_devolucao_prevista, 'DD/MM/YYYY')   AS dataDevolucaoPrevista,
+      to_char(e.data_devolucao,          'DD/MM/YYYY')   AS dataDevolucaoReal,
+      CASE
+        WHEN e.status = 'ATIVO'     THEN 'Em andamento'
+        WHEN e.status = 'ATRASADO'  THEN 'Atrasado'
+        WHEN e.status = 'CONCLUIDO' THEN 'Devolvido'
+        ELSE e.status::text
+      END                                               AS status,
+      dv.atraso                                          AS diasAtraso,
+      dv.multa                                           AS valorMulta
+    FROM emprestimo e
+    JOIN livro     l    ON e.id_livro     = l.id
+    JOIN locatorio loc  ON e.id_usuario   = loc.id
+    LEFT JOIN divida  dv   ON dv.id_emprestimo = e.id
+    WHERE e.id_usuario = $1
+    ORDER BY e.data_emprestimo DESC;
+  `;
+
+  try {
+    const { rows } = await pool.query(sql, [locatorioId]);
+    return res.json(rows);
+  } catch (err) {
+    console.error('Erro ao buscar histórico de empréstimos:', err);
+    return res.status(500).json({ error: 'Erro ao buscar empréstimos' });
+  }
+});
+
+
 
 app.get('/api/select', async (req, res) => {
   // 1) Queries sem parâmetro

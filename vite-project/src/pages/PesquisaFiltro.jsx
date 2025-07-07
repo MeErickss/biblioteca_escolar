@@ -15,7 +15,7 @@ export function PesquisaFiltro() {
           <ArrowLeftOutlined /> Voltar
         </button>
       </div>
-      <Filtros filtros={['Autor', 'Titulo', 'Categoria']} />
+      <Filtros filtros={["Psicologia", "Medicina", "Arquitetura"]} />
       <div className='w-full flex justify-center px-12 mt-8'>
         {/* Passa type (pode ser undefined) ao componente */}
         <ResultadoFiltros tipo={type} />

@@ -12,7 +12,7 @@ export function Filtros({ filtros }) {
   return (
     <div className="flex flex-col gap-6 w-full h-[20rem] justify-center items-center">
       <h1 className='text-6xl'>Filtros</h1>
-      <div className='grid grid-cols-4 grid-rows-2 gap-12 text-center'>
+      <div className='grid grid-cols-3 gap-12 text-center'>
         {filtros.map(texto => (
           <div
             key={texto}

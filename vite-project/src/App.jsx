@@ -10,6 +10,7 @@ import { ResultadoPesquisa } from './pages/ResultadoPesquisa';
 import { Cadastro } from './pages/Cadastro';
 import { PesquisaFiltro } from './pages/PesquisaFiltro';
 import { DetalhesLivro } from './pages/DetalhesLivro';
+import { Emprestimos } from './pages/Emprestimos';
 
 
 export function App() {
@@ -25,6 +26,7 @@ export function App() {
           <Route path="filtro/:descricao" element={< PesquisaFiltro/>} />
           <Route path="cadastro" element={< Cadastro/>} />
           <Route path="detalhes" element={< DetalhesLivro/>} />
+          <Route path="emprestimos/:usuarioId" element={< Emprestimos/>} />
         
           {/* Redirecionamento - agora faz sentido pois temos uma rota "/" */}
           <Route path="inicio" element={<Navigate to="/" replace />} />
