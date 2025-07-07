@@ -19,9 +19,9 @@ export function Reinaldo() {
     <>
       <button
         onClick={() => {setModalChat(!modalChat);setInput('');setResponse('');setText('Olá, eu sou o Reinaldo, como posso te ajudar? 🦝')}}
-        className="cursor-pointer absolute -mt-[10rem] z-50"
+        className="cursor-pointer absolute w-1/2 z-50"
       >
-        <img width={110} src={ReinaldoChat} alt="ReinaldoChat" />
+        <img width={110} src={ReinaldoChat} className="-mt-[2.34rem]" alt="ReinaldoChat" />
       </button>
 
       {modalChat && (
