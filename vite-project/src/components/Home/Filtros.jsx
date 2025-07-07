@@ -1,3 +1,4 @@
+// Filtros.jsx
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -5,8 +6,9 @@ export function Filtros({ filtros }) {
   const navigate = useNavigate();
 
   const handleClick = (e) => {
-    const filtro = e.currentTarget.innerText.trim().toLowerCase();
-    navigate(`/filtro/${filtro}`);
+    // transforma "Psicologia" em "psicologia"
+    const categoria = e.currentTarget.innerText.trim().toLowerCase();
+    navigate(`/filtro/${categoria}`);
   }
 
   return (
@@ -19,7 +21,7 @@ export function Filtros({ filtros }) {
             onClick={handleClick}
             className='flex justify-center items-center w-[15rem] h-[4rem] p-2 rounded-2xl shadow-2xl cursor-pointer'
           >
-            <span><strong>{texto}</strong></span>
+            <strong>{texto}</strong>
           </div>
         ))}
       </div>

@@ -55,16 +55,7 @@ app.get("/api/tables", async (req, res) => {
 app.get('/api/livro/:id', async (req, res) => {
   const { id } = req.params;
   const sql = `
-    SELECT 
-      l.*,
-      a.nome       AS autor,
-      c.descricao  AS categoria
-    FROM livro l
-    LEFT JOIN livro_autores la ON la.livro_id = l.id
-    LEFT JOIN autor a         ON a.id        = la.autor_id
-    LEFT JOIN categoria c     ON c.id        = l.id_categoria
-    WHERE l.id = $1
-    LIMIT 1
+    SELECT * FROM livro WHERE id = $1;
   `;
   let client;
   try {
@@ -81,6 +72,41 @@ app.get('/api/livro/:id', async (req, res) => {
     if (client) client.release();
   }
 });
+
+// Retorna todos os empréstimos (independente de locatário)
+app.get('/api/emprestimos', async (req, res) => {
+  const sql = `
+    SELECT
+      e.id                                               AS id,
+      l.titulo                                           AS livro,
+      to_char(e.data_emprestimo,         'DD/MM/YYYY')   AS dataEmprestimo,
+      to_char(e.data_devolucao_prevista, 'DD/MM/YYYY')   AS dataDevolucaoPrevista,
+      to_char(e.data_devolucao,          'DD/MM/YYYY')   AS dataDevolucaoReal,
+      CASE
+        WHEN e.status = 'ATIVO'     THEN 'Em andamento'
+        WHEN e.status = 'ATRASADO'  THEN 'Atrasado'
+        WHEN e.status = 'CONCLUIDO' THEN 'Devolvido'
+        ELSE e.status::text
+      END                                               AS status,
+      dv.atraso                                          AS diasAtraso,
+      dv.multa                                           AS valorMulta,
+      loc.nome                                           AS nomeLocatario
+    FROM emprestimo e
+    JOIN livro     l    ON e.id_livro     = l.id
+    JOIN locatorio loc  ON e.id_usuario   = loc.id
+    LEFT JOIN divida  dv   ON dv.id_emprestimo = e.id
+    ORDER BY e.data_emprestimo DESC;
+  `;
+
+  try {
+    const { rows } = await pool.query(sql);
+    return res.json(rows);
+  } catch (err) {
+    console.error('Erro ao buscar TODOS os empréstimos:', err);
+    return res.status(500).json({ error: 'Erro ao buscar empréstimos' });
+  }
+});
+
 
 app.get('/api/emprestimos/:locatorioId', async (req, res) => {
   const { locatorioId } = req.params;
@@ -320,51 +346,38 @@ app.put('/api/update', async (req, res) => {
   }
 });
 
+// server.js (trecho completo da rota /api/filter/:type)
+
+// server.js (trecho relevante)
 app.get('/api/filter/:type', async (req, res) => {
   const { type } = req.params;
   const term = req.query.term || '';
-  if (!['autor','titulo','categoria'].includes(type)) {
-    return res.status(400).json({ error: `Filtro "${type}" não suportado.` });
+
+  if (type !== 'categoria') {
+    return res.status(400).json({ error: `Só filtro por categoria é suportado.` });
   }
 
   const like = `%${term}%`;
-  let sql, params;
-  switch (type) {
-    case 'autor':
-      sql = `
-        SELECT l.*
-          FROM livro l
-          JOIN livro_autores la ON la.livro_id = l.id
-          JOIN autor a         ON a.id        = la.autor_id
-      `;
-      params = [like];
-      break;
-    case 'titulo':
-      sql = `
-        SELECT *
-          FROM livro
-      `;
-      params = [like];
-      break;
-    case 'categoria':
-      sql = `
-        SELECT l.*
-          FROM livro l
-          JOIN categoria c ON c.id = l.id_categoria
-      `;
-      params = [like];
-      break;
-  }
 
-  let client;
+  const sql = `
+    SELECT
+      l.id,
+      l.titulo,
+      l.caminho_imagem,
+      EXTRACT(YEAR FROM l.datapublicacao)::INT AS ano,
+      COALESCE(c.descricao, '')             AS categoria
+    FROM livro l
+    LEFT JOIN categoria c ON c.id = l.id_categoria
+    WHERE c.descricao ILIKE $1
+    ORDER BY l.titulo;
+  `;
+
   try {
-    client = await pool.connect();
-    const result = await client.query(sql, params);
-    return res.json(result.rows);
+    const { rows } = await pool.query(sql, [like]);
+    return res.json(rows);
   } catch (err) {
-    console.error('Erro no filtro:', err);
-    return res.status(500).json({ error: 'Erro ao executar filtro no banco.' });
-  } finally {
-    if (client) client.release();
+    console.error('Erro ao buscar livros filtrados:', err);
+    return res.status(500).json({ error: 'Erro ao buscar livros' });
   }
 });
+

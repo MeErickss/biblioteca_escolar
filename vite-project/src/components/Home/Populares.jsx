@@ -2,6 +2,7 @@ import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import React, { useEffect, useState } from 'react';
 import loadingGif from "../../images/loading.gif";
 import axios from 'axios';
+import { BookCover } from "../BookCover";
 
 export function Populares() {
   const [dados, setDados] = useState([]);
@@ -58,7 +59,7 @@ export function Populares() {
           className="flex flex-col justify-between w-[14rem] h-[29rem] p-4 rounded-2xl bg-neutral-100 shadow-lg"
           onClick={()=>console.log("a")}
         >
-          <img src={item.caminho_imagem} alt="Capa do livro" className="mb-4 w-[12rem] h-[16rem]" />
+          <BookCover isbn={item.isbn} alt={`Capa de ${item.titulo}`} />
           <article className="flex flex-col flex-1 text-start">
             <h2 className="text-sm font-bold mb-2">{item.titulo}</h2>
             <span className="text-sm mb-1">Autor: {item.autor}</span>

@@ -5,7 +5,7 @@ import axios from 'axios';
 import loadingGif from '../images/loading.gif';
 
 export function DetalhesLivro() {
-  const { id } = useParams();                // assume route /livro/:id
+  const { id } = useParams();
   const navigate = useNavigate();
   const [livro, setLivro] = useState(null);
   const [related, setRelated] = useState([]);
@@ -20,9 +20,10 @@ export function DetalhesLivro() {
         const resp = await axios.get(`http://localhost:5000/api/livro/${id}`);
         setLivro(resp.data);
         // livros relacionados (mesma categoria)
-        const rel = await axios.get(`http://localhost:5000/api/filter/categoria`, {
-          params: { term: resp.data.categoria }
+        const rel = await axios.get(`http://localhost:5000/api/select`, {
+          params: { table:"livro" }
         });
+        console.log(rel.data)
         // filtra excluindo o atual e pega até 6
         setRelated(rel.data.filter(b => b.id !== resp.data.id).slice(0, 6));
       } catch (err) {

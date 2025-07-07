@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import loadingGif from "../../images/loading.gif";
+import { useNavigate } from 'react-router-dom';
+import { BookCover } from '../BookCover';
 
 export function Main({ dados, setDados, loading, error }) {
+  const navigtate = useNavigate();
 
   if (loading) {
     return (
@@ -31,16 +34,9 @@ export function Main({ dados, setDados, loading, error }) {
               <div
                 key={item.id}
                 className="flex flex-col justify-between w-[14rem] h-[29rem] p-4 rounded-2xl bg-neutral-100 shadow-lg cursor-pointer"
-                onClick={() => console.log("clicou em", item.titulo)}
+                onClick={() => navigtate(`detalhes/${item.id}`)}
               >
-                <img
-                  src={`https://covers.openlibrary.org/b/isbn/${item.isbn}-M.jpg`}
-                  alt={`Capa de ${item.titulo}`}
-                  className="mb-4 w-[12rem] h-[16rem] object-cover"
-                  onError={e => {
-                    e.currentTarget.src = "/capa-placeholder.png";
-                  }}
-                />
+                <BookCover isbn={item.isbn} alt={`Capa de ${item.titulo}`} />   
                 <article className="flex flex-col flex-1 text-start">
                   <h2 className="text-lg font-bold mb-2">{item.titulo}</h2>
                   <span className="text-sm mb-1">Autor: {item.autor}</span>

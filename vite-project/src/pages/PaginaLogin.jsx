@@ -104,7 +104,7 @@ export function PaginaLogin() {
         <header className="w-full text-5xl mb-6"><strong>Bibliotecário</strong></header>
 
         <main className="flex flex-col w-full gap-6">
-          <div className="flex flex-col text-start">
+          <div className="flex flex-col justify-center items-center">
             <input
               name="login"
               value={inputValues.login}
@@ -116,7 +116,7 @@ export function PaginaLogin() {
             {inputErrors.login && <span className="text-red-600 text-sm">Preencha o login corretamente!</span>}
           </div>
 
-          <div className="flex flex-col text-start">
+          <div className="flex justify-center items-center flex-col">
             <input
               name="senha"
               value={inputValues.senha}
@@ -129,8 +129,6 @@ export function PaginaLogin() {
           </div>
 
           {authError && <div className="text-red-600 text-sm">Login ou senha incorretos!</div>}
-
-          <button className="self-end text-sm hover:text-blue-600 hover:border-b-2">Esqueceu a senha?</button>
         </main>
 
         <button
