@@ -54,16 +54,30 @@ app.get("/api/tables", async (req, res) => {
 
 app.get('/api/livro/:id', async (req, res) => {
   const { id } = req.params;
+
   const sql = `
-    SELECT * FROM livro WHERE id = $1;
+    SELECT 
+      l.*,
+      EXTRACT(YEAR FROM l.datapublicacao)::INT AS ano,
+      COALESCE(c.descricao, '') AS categoria,
+      json_agg(json_build_object('id', a.id, 'nome', a.nome)) FILTER (WHERE a.id IS NOT NULL) AS autores
+    FROM livro l
+    LEFT JOIN categoria c ON c.id = l.id_categoria
+    LEFT JOIN livro_autor la ON la.id_livro = l.id
+    LEFT JOIN autor a ON la.id_autor = a.id
+    WHERE l.id = $1
+    GROUP BY l.id, c.descricao;
   `;
+
   let client;
   try {
     client = await pool.connect();
     const result = await client.query(sql, [id]);
+
     if (result.rowCount === 0) {
       return res.status(404).json({ error: 'Livro não encontrado.' });
     }
+
     res.json(result.rows[0]);
   } catch (err) {
     console.error('Erro ao buscar livro por id:', err);
@@ -72,6 +86,7 @@ app.get('/api/livro/:id', async (req, res) => {
     if (client) client.release();
   }
 });
+
 
 // Retorna todos os empréstimos (independente de locatário)
 app.get('/api/emprestimos', async (req, res) => {
@@ -143,6 +158,50 @@ app.get('/api/emprestimos/:locatorioId', async (req, res) => {
   }
 });
 
+app.post('/api/recommend', async (req, res) => {
+  const { prompt } = req.body;
+  if (!prompt) {
+    return res.status(400).json({ error: 'Campo "prompt" é obrigatório.' });
+  }
+
+  try {
+    const hfResponse = await fetch(
+  'https://api-inference.huggingface.co/pipeline/text2text-generation/tiiuae/falcon-7b-instruct',
+      {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${""}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          inputs: prompt,
+          parameters: {
+            max_new_tokens: 100,
+            temperature: 0.7,
+            top_p: 0.9
+          }
+        }),
+      }
+    );
+
+    if (!hfResponse.ok) {
+      const text = await hfResponse.text();
+      console.error('Hugging Face error:', hfResponse.status, text);
+      return res
+        .status(hfResponse.status)
+        .json({ error: 'Erro na API Hugging Face', details: text });
+    }
+
+    const data = await hfResponse.json();
+    // data é um array; cada objeto tem generated_text
+    const generated = data[0]?.generated_text ?? '';
+    res.json({ generated_text: generated });
+
+  } catch (err) {
+    console.error('Erro na rota /api/recommend:', err);
+    res.status(500).json({ error: 'Erro interno no servidor.' });
+  }
+});
 
 
 app.get('/api/select', async (req, res) => {
@@ -155,7 +214,7 @@ app.get('/api/select', async (req, res) => {
     divida:     'SELECT * FROM divida;',
     editora:    'SELECT * FROM editora;',
     emprestimo: 'SELECT * FROM emprestimo;',
-    livro:      'SELECT * FROM livro;',
+    livro:      "SELECT *,EXTRACT(YEAR FROM l.datapublicacao)::INT AS ano, COALESCE(c.descricao, '') AS categoria FROM livro l LEFT JOIN categoria c ON c.id = l.id_categoria;",
     locatorio:  'SELECT * FROM locatorio;',
     subcategoria: 'SELECT * FROM subcategoria;',
     populares:  'SELECT * FROM livro l WHERE id < 10;',

@@ -7,19 +7,11 @@ import { useState } from 'react';
 
 export function Article({ handlePesquisa }) {
   const [query, setQuery] = useState('');
-  const navigate = useNavigate();
 
   const onInputChange = (e) => {
     const val = e.target.value;
     setQuery(val);
     handlePesquisa(val);
-  };
-
-  const onKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      navigate(`/pesquisa/${encodeURIComponent(query)}`);
-    }
   };
 
   return (
@@ -37,7 +29,6 @@ export function Article({ handlePesquisa }) {
               id="input"
               value={query}
               onChange={onInputChange}
-              onKeyDown={onKeyDown}
               className='relative w-9/12 h-14 border-b-2 border-neutral-500 focus:outline-none'
               type="text"
               placeholder='Pesquisar...'

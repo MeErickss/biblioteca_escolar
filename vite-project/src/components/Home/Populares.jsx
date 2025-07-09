@@ -53,20 +53,29 @@ export function Populares() {
 
           {/* Grid com 2 linhas e 4 colunas */}
           <div className='grid grid-cols-5 grid-rows-1 gap-6 px-12 py-4'>
-      {dados.map((item) => (
-        <div
-          key={item.id}
-          className="flex flex-col justify-between w-[14rem] h-[29rem] p-4 rounded-2xl bg-neutral-100 shadow-lg"
-          onClick={()=>console.log("a")}
-        >
-          <BookCover isbn={item.isbn} alt={`Capa de ${item.titulo}`} />
-          <article className="flex flex-col flex-1 text-start">
-            <h2 className="text-sm font-bold mb-2">{item.titulo}</h2>
-            <span className="text-sm mb-1">Autor: {item.autor}</span>
-            <span className="text-sm">Ano: {item.ano}</span>
-          </article>
-        </div>
-      ))}
+            {dados.length > 0 ? (
+              dados.map((item, idx) => (
+                <div
+                  key={`${item.isbn}-${idx}`}
+                  className='flex flex-col justify-between p-4 bg-neutral-100 rounded-2xl shadow-lg cursor-pointer'
+                  onClick={() => navigate(`/livro/${item.isbn}`)}
+                >
+                  {/* Passa ISBN e classe para o BookCover */}
+                  <BookCover
+                    isbn={item.isbn}
+                    alt={`Capa de ${item.titulo}`}
+                    className="w-[12rem] h-[16rem] object-cover mb-4 rounded"
+                  />
+                  <h2 className='text-lg font-bold'>{item.titulo}</h2>
+                  <p className='text-sm'>Ano: {item.ano}</p>
+                  <p className='text-sm'>Categoria: {item.categoria}</p>
+                </div>
+              ))
+            ) : (
+              <p className="text-gray-500 col-span-full text-center">
+                Nenhum livro encontrado.
+              </p>
+            )}
       {dados.length === 0 && !loading && (
         <p className="text-gray-500">Nenhum livro encontrado.</p>
       )}

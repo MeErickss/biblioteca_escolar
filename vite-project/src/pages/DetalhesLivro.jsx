@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import loadingGif from '../images/loading.gif';
+import { BookCover } from '../components/BookCover';
+import Group15 from '../images/Group15.svg'
 
 export function DetalhesLivro() {
   const { id } = useParams();
@@ -12,6 +14,9 @@ export function DetalhesLivro() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // ref para o container de cards
+  const carouselRef = useRef(null);
+
   useEffect(() => {
     async function fetchDetalhes() {
       try {
@@ -19,13 +24,12 @@ export function DetalhesLivro() {
         // dados do livro
         const resp = await axios.get(`http://localhost:5000/api/livro/${id}`);
         setLivro(resp.data);
-        // livros relacionados (mesma categoria)
+
+        // livros relacionados (mesma categoria ou qualquer lógica sua)
         const rel = await axios.get(`http://localhost:5000/api/select`, {
-          params: { table:"livro" }
+          params: { table: "livro" }
         });
-        console.log(rel.data)
-        // filtra excluindo o atual e pega até 6
-        setRelated(rel.data.filter(b => b.id !== resp.data.id).slice(0, 6));
+        setRelated(rel.data);
       } catch (err) {
         console.error(err);
         setError(err);
@@ -36,55 +40,71 @@ export function DetalhesLivro() {
     fetchDetalhes();
   }, [id]);
 
-  if (loading) return <div className="flex justify-center items-center h-screen"><img src={loadingGif} alt="Carregando..."/></div>;
-  if (error)   return <div className="text-red-500 text-center p-4">Erro ao carregar dados.</div>;
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <img src={loadingGif} alt="Carregando..." />
+      </div>
+    );
+  }
+  if (error) {
+    return (
+      <div className="text-red-500 text-center p-4">
+        Erro ao carregar dados.
+      </div>
+    );
+  }
 
   return (
     <div className="w-screen min-h-screen bg-white">
-      <div className="px-12 pt-8">
-        <button onClick={() => navigate(-1)} className="bg-yellow-400 text-white px-4 py-2 rounded-lg mb-6">
+      <div className="p-12 pt-[12rem]">
+        <button
+          onClick={() => navigate("/")}
+          className="bg-yellow-400 text-white px-4 py-2 rounded-lg mb-6"
+        >
           <LeftOutlined /> Voltar
         </button>
-        <div className="max-w-5xl mx-auto grid grid-cols-2 gap-12 items-start">
-          {/* Capa */}
-          <img src={livro.caminho_imagem} alt={livro.titulo} className="w-full h-auto object-cover rounded-lg shadow" />
 
-          {/* Detalhes */}
+        <div className="w-5xl mx-auto bg-neutral-200 p-8 rounded-lg grid grid-cols-2 gap-2 items-start">
+          <BookCover
+            isbn={livro.isbn}
+            alt={`Capa de ${livro.titulo}`}
+            className="w-[12rem] h-[16rem] object-cover mb-4 rounded"
+          />
           <div className="space-y-4">
             <h1 className="text-4xl font-bold">{livro.titulo}</h1>
-            <p><strong>Autor:</strong> {livro.autor}</p>
-            <p><strong>Páginas:</strong> {livro.paginas || '—'}</p>
+            <p><strong>Autor:</strong> {livro.autores[0].nome}</p>
             <p><strong>ISBN:</strong> {livro.isbn}</p>
             <p className="mt-4 text-gray-700 leading-relaxed">{livro.descricao}</p>
-            <p><strong>Unidades disponíveis:</strong> {livro.estoque}</p>
+            <div className='w-full flex justify-end'><img src={Group15} width={200} /></div>
           </div>
         </div>
 
-        {/* Relacionados */}
         {related.length > 0 && (
-          <div className="mt-16">
+          <div className="mt-16 relative">
             <h2 className="text-2xl font-semibold mb-4">Relacionados</h2>
-            <div className="relative">
-              <button className="absolute left-0 top-1/2 transform -translate-y-1/2 p-2 bg-white rounded-full shadow">
-                <LeftOutlined />
-              </button>
-              <div className="flex space-x-6 overflow-x-auto px-12">
-                {related.map(item => (
-                  <div key={item.id} className="flex-shrink-0 w-40">
-                    <img
-                      src={item.caminho_imagem}
-                      alt={item.titulo}
-                      className="w-full h-56 object-cover rounded-lg mb-2 cursor-pointer"
-                      onClick={() => navigate(`/livro/${item.id}`)}
-                    />
-                    <h3 className="text-sm font-medium text-center">{item.titulo}</h3>
-                  </div>
-                ))}
-              </div>
-              <button className="absolute right-0 top-1/2 transform -translate-y-1/2 p-2 bg-white rounded-full shadow">
-                <RightOutlined />
-              </button>
+
+            {/* Container de cards */}
+            <div
+              ref={carouselRef}
+              className="flex space-x-6 overflow-x-auto no-scrollbar px-12"
+              style={{ scrollBehavior: 'smooth' }}
+            >
+              {related.map(item => (
+                <div key={`${item.id}-${item.isbn}`} className="flex-shrink-0 w-40">
+                    <button onClick={() => navigate(`/livro/${item.id}`)}>
+                      <BookCover
+                        isbn={item.isbn}
+                        alt={`Capa de ${item.titulo}`}
+                        className="w-[12rem] h-[16rem] object-cover mb-4 rounded"
+                      />
+                    </button>
+
+                  <h3 className="text-sm font-medium text-center">{item.titulo}</h3>
+                </div>
+              ))}
             </div>
+
           </div>
         )}
       </div>

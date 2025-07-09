@@ -1,26 +1,15 @@
-
 export async function getBookRecommendation(prompt) {
-  const response = await fetch("https://api-inference.huggingface.co/pipeline/text-generation/tiiuae/falcon-7b-instruct", {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer `,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      inputs: prompt,
-      parameters: {
-        max_new_tokens: 100,
-        temperature: 0.7,
-        top_p: 0.9
-      }
-    })
+  const res = await fetch('http://localhost:5000/api/recommend', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ prompt }),
   });
-  if (!response.ok) {
-    const errorText = await response.text();
-    console.error("Erro da API Hugging Face:", response.status, errorText);
-    throw new Error("Erro na resposta da Hugging Face API");
+
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.error || 'Erro desconhecido');
   }
 
-  const data = await response.json();
-  return data[0]?.generated_text || "Sem resposta.";
+  const { generated_text } = await res.json();
+  return generated_text;
 }

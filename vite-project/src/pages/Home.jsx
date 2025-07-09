@@ -28,7 +28,6 @@ export function Home() {
         setError(err);
       } finally {
         setLoading(false);
-        navigate(`/pesquisa/${e}`)
       }
     }};
 
@@ -41,6 +40,9 @@ export function Home() {
             { params: { table: "livro" } }
           );
           // ajuste aqui se precisar acessar data.livros em vez de data
+          console.log("data")
+          console.log(data)
+          console.log("data")
           setDados(Array.isArray(data) ? data : data.livros || []);
         } catch (err) {
           console.error("Erro ao buscar livros:", err);
