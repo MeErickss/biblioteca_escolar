@@ -88,4 +88,5 @@ npm run dev
 ---
 
 > Projeto desenvolvido nas disciplinas de **Desenvolvimento Web 3 (TI24J)** e **Projeto Integrador** pelos alunos Erick Alair e Julia Stela
+>
 > UTFPR - Campo Mourão | 2025
