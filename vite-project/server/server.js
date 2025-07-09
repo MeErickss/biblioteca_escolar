@@ -2,6 +2,10 @@ import 'dotenv/config';
 import express from 'express'
 import pkg from 'pg';
 import cors from 'cors';
+import dotenv from "dotenv"
+import fetch from 'node-fetch';
+
+dotenv.config();
 
 const { Pool } = pkg;
 const app = express()
@@ -12,6 +16,8 @@ app.use(express.json());
 // Configuração do pool de conexões
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
+  HF_TOKEN:process.env.HF_TOKEN,
+  HF_ENDPOINT_URL:process.env.HF_ENDPOINT_URL,
   ssl: {
     rejectUnauthorized: false
   }
@@ -164,13 +170,15 @@ app.post('/api/recommend', async (req, res) => {
     return res.status(400).json({ error: 'Campo "prompt" é obrigatório.' });
   }
 
+  console.log(process.env.HF_TOKEN)
+
   try {
     const hfResponse = await fetch(
-  'https://api-inference.huggingface.co/pipeline/text2text-generation/tiiuae/falcon-7b-instruct',
+  process.env.HF_ENDPOINT_URL,
       {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${""}`,
+          'Authorization': `Bearer ${process.env.HF_TOKEN}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({

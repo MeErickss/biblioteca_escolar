@@ -6,7 +6,6 @@ import { Layout } from './pages/Layout';
 import { PaginaLogin } from './pages/PaginaLogin';
 import { Home } from './pages/Home';
 import { Erro404 } from './pages/Erro404';
-import { ResultadoPesquisa } from './pages/ResultadoPesquisa';
 import { Cadastro } from './pages/Cadastro';
 import { PesquisaFiltro } from './pages/PesquisaFiltro';
 import { DetalhesLivro } from './pages/DetalhesLivro';
@@ -22,7 +21,6 @@ export function App() {
           
           {/* Rota de login */}
           <Route path="login" element={<PaginaLogin />} />
-          <Route path="pesquisa/:pesquisa" element={< ResultadoPesquisa/>} />
           <Route path="filtro/:categoria" element={< PesquisaFiltro/>} />
           <Route path="cadastro" element={< Cadastro/>} />
           <Route path="livro/:id" element={< DetalhesLivro/>} />

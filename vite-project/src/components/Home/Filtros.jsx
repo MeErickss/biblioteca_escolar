@@ -1,14 +1,11 @@
 // Filtros.jsx
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 
-export function Filtros({ filtros }) {
-  const navigate = useNavigate();
+export function Filtros({ filtros, setFiltro  }) {
 
   const handleClick = (e) => {
-    // transforma "Psicologia" em "psicologia"
     const categoria = e.currentTarget.innerText.trim().toLowerCase();
-    navigate(`/filtro/${categoria}`);
+    setFiltro(categoria)
   }
 
   return (
@@ -18,7 +15,7 @@ export function Filtros({ filtros }) {
         {filtros.map(texto => (
           <div
             key={texto}
-            onClick={handleClick}
+            onClick={(e) => handleClick(e)}
             className='flex justify-center items-center w-[15rem] h-[4rem] p-2 rounded-2xl shadow-2xl cursor-pointer'
           >
             <strong>{texto}</strong>
