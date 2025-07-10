@@ -44,7 +44,7 @@ export function Reinaldo() {
         }}
         className="cursor-pointer absolute -mt-[2.3rem] z-50"
       >
-        <img width={110} src={ReinaldoChat} alt="ReinaldoChat" />
+        <img className='-mt-[2.4rem]' width={110} src={ReinaldoChat} alt="ReinaldoChat" />
       </button>
       {modalChat && (
         <div className="ml-10 mt-2">

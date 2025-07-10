@@ -222,10 +222,14 @@ app.get('/api/select', async (req, res) => {
     divida:     'SELECT * FROM divida;',
     editora:    'SELECT * FROM editora;',
     emprestimo: 'SELECT * FROM emprestimo;',
-    livro:      "SELECT *,EXTRACT(YEAR FROM l.datapublicacao)::INT AS ano, COALESCE(c.descricao, '') AS categoria FROM livro l LEFT JOIN categoria c ON c.id = l.id_categoria;",
+    livro:      "SELECT * FROM livro ORDER BY titulo ASC;",
     locatorio:  'SELECT * FROM locatorio;',
     subcategoria: 'SELECT * FROM subcategoria;',
     populares:  'SELECT * FROM livro l WHERE id < 10;',
+    config_limite_emprestimo:  'SELECT * FROM config_limite_emprestimo;',
+    livro_editora:  'SELECT * FROM livro_editora;',
+    livro_autor:  'SELECT * FROM livro_autor;',
+    locatorio_curso:  'SELECT * FROM locatorio_curso;'
   };
 
   // 2) Queries que aceitam filtro (exemplo aqui puxa categoria por descrição)
@@ -430,7 +434,6 @@ app.get('/api/filter/:type', async (req, res) => {
     SELECT
       l.id,
       l.titulo,
-      l.caminho_imagem,
       EXTRACT(YEAR FROM l.datapublicacao)::INT AS ano,
       COALESCE(c.descricao, '')             AS categoria
     FROM livro l
