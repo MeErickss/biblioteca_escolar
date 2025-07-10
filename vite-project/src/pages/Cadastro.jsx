@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import axios from "axios";
-import { CadastroForm } from "../components/CadastroForm";
+import { Select, Button } from "antd";
+
 
 export function Cadastro() {
   const [loading, setLoading] = useState(false);
@@ -97,54 +98,20 @@ export function Cadastro() {
   }, [rows, searchTerm]);
 
   return (
-    <div className="mt-12 p-12">
-      {error && <p className="text-red-600">{error}</p>}
-
-      <h1 className="text-3xl mb-4 text-center">
-        Cadastro de <span className="capitalize">{cadastroTable || "..."}</span>
-      </h1>
-
-      <div className="flex flex-row justify-evenly items-center w-full gap-4 mb-6">
-        <div>
-          <span className="font-bold text-black text-xl">Selecione uma Tabela: </span>
-          <select
-            value={cadastroTable}
-            onChange={(e) => setCadastroTable(e.target.value)}
-            className="border p-2 rounded"
-          >
-            <option value="">-- selecione --</option>
-            {tabelas.map((t) => (
-              <option key={t} value={t}>
-                {t}
-              </option>
-            ))}
-          </select>
+    <div className="flex flex-col m-12 p-24">
+      <h1 className="text-center text-3xl font-bold text-black">Cadastro de Divida</h1>
+      <div className="flex justify-between items-center flex-wrap w-full h-full mb-10">
+        <div className="flex flex-row w-[20rem] gap-2">
+          <Select className="flex w-[10rem] h-full"/>
+          <Button type="primary">Todos</Button>
+          <Button type="primary" color="danger">Ativos</Button>
         </div>
-
-        <div>
-          <label className="text-xl font-bold" htmlFor="search">
-            Pesquisa:{" "}
-          </label>
-          <input
-            id="search"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="border rounded-sm p-2"
-            type="text"
-            placeholder="Pesquisar..."
-          />
-        </div>
+        <Button type="primary" color="danger">Adicionar</Button>
       </div>
-
-      {cadastroTable && (
-        <CadastroForm
-          rows={filteredRows}
-          onDelete={(id) => setToDelete(id)}
-          onUpdate={(rowObj) => setToUpdate(rowObj)}
-          onInsert={(newData) => setToInsert(newData)}
-          loading={loading}
-        />
-      )}
+      <input type="text" className="border-2 border-neutral-400 outline-none focus:border-blue-300 rounded-sm px-2" placeholder="Pesquisar..."/>
+      <div>
+        
+      </div>
     </div>
   );
 }

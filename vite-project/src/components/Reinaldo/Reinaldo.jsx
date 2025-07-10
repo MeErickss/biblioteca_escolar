@@ -42,9 +42,9 @@ export function Reinaldo() {
           setResponse('');
           setText('Olá, eu sou o Reinaldo, como posso te ajudar? 🦝');
         }}
-        className="cursor-pointer absolute -mt-[2.3rem] z-50"
+        className="cursor-pointer absolute z-50"
       >
-        <img width={110} src={ReinaldoChat} alt="ReinaldoChat" />
+        <img width={110} className='-mt-[2.4rem]' src={ReinaldoChat} alt="ReinaldoChat" />
       </button>
       {modalChat && (
         <div className="ml-10 mt-2">

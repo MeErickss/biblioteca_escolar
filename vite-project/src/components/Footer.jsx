@@ -21,10 +21,10 @@ export function Footer() {
       {/* Botão "Voltar ao topo" */}
       <button
         onClick={scrollToTop}
-        className="absolute right-8 top-8 bg-gray text-neutral-700 hover:bg-gray-400 p-6 rounded-full shadow-md transition cursor-pointer"
+        className="absolute right-8 top-8 bg-neutral-200 hover:brightness-90 p-6 rounded-full shadow-md transition cursor-pointer"
         aria-label="Voltar ao topo"
       >
-        <UpOutlined />
+        <UpOutlined style={{color:'black'}} />
       </button>
 
       <div className="text-center mt-12 text-xs">
