@@ -7,7 +7,6 @@ import { PaginaLogin } from './pages/PaginaLogin';
 import { Home } from './pages/Home';
 import { Erro404 } from './pages/Erro404';
 import { Cadastro } from './pages/Cadastro';
-import { PesquisaFiltro } from './pages/PesquisaFiltro';
 import { DetalhesLivro } from './pages/DetalhesLivro';
 import { Emprestimos } from './pages/Emprestimos';
 
@@ -21,7 +20,6 @@ export function App() {
           
           {/* Rota de login */}
           <Route path="login" element={<PaginaLogin />} />
-          <Route path="filtro/:categoria" element={< PesquisaFiltro/>} />
           <Route path="cadastro" element={< Cadastro/>} />
           <Route path="livro/:id" element={< DetalhesLivro/>} />
           <Route path="emprestimos/:usuarioId" element={< Emprestimos/>} />
