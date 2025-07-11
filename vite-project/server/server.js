@@ -431,7 +431,6 @@ app.get('/api/filter/:type', async (req, res) => {
     SELECT
       l.id,
       l.titulo,
-      l.caminho_imagem,
       EXTRACT(YEAR FROM l.datapublicacao)::INT AS ano,
       COALESCE(c.descricao, '')             AS categoria
     FROM livro l
