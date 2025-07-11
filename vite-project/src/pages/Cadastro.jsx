@@ -1,116 +1,89 @@
-import React, { useState, useEffect, useMemo } from "react";
-import axios from "axios";
-import { Select, Button } from "antd";
-
+import React, { useState, useEffect, useMemo } from 'react';
+import axios from 'axios';
+import { Select } from 'antd';
+import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
 export function Cadastro() {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [cadastroTable, setCadastroTable] = useState("");
   const [tabelas, setTabelas] = useState([]);
+  const [cadastroTable, setCadastroTable] = useState(null);
   const [rows, setRows] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
 
-  // CRUD states
-  const [toDelete, setToDelete] = useState(null);
-  const [toUpdate, setToUpdate] = useState(null);
-  const [toInsert, setToInsert] = useState(null);
-
-  // 1) busca lista de tabelas
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/api/tables")
-      .then((res) => setTabelas(res.data))
-      .catch(() => setError("Erro ao buscar tabelas."));
+    axios.get('http://localhost:5000/api/tables')
+      .then(res => setTabelas(res.data.map(tbl => ({ value: tbl, label: tbl }))))
+      .catch(err => console.error(err));
   }, []);
 
-  // 2) carrega dados da tabela selecionada
   useEffect(() => {
-    if (!cadastroTable) {
-      setRows([]);
-      return;
-    }
-    axios
-      .get("http://localhost:5000/api/select", { params: { table: cadastroTable } })
-      .then((res) => {
-        setRows(res.data);
-        setSearchTerm(""); // reset pesquisa
-      })
-      .catch(() => setError("Erro ao buscar registros."));
+    if (!cadastroTable) return setRows([]);
+    axios.get('http://localhost:5000/api/select', { params: { table: cadastroTable } })
+      .then(res => setRows(res.data))
+      .catch(err => console.error(err));
   }, [cadastroTable]);
 
-  // 3) delete
-  useEffect(() => {
-    if (toDelete == null) return;
-    setLoading(true);
-    axios
-      .delete("http://localhost:5000/api/delete", {
-        data: { table: cadastroTable, id: toDelete },
-      })
-      .then(() => setRows((r) => r.filter((row) => row.id !== toDelete)))
-      .catch(() => setError("Falha ao remover."))
-      .finally(() => {
-        setLoading(false);
-        setToDelete(null);
-      });
-  }, [toDelete, cadastroTable]);
-
-  // 4) update
-  useEffect(() => {
-    if (!toUpdate) return;
-    setLoading(true);
-    axios
-      .put("http://localhost:5000/api/update", { table: cadastroTable, data: toUpdate })
-      .then(() => {
-        setRows((r) => r.map((row) => (row.id === toUpdate.id ? toUpdate : row)));
-      })
-      .catch(() => setError("Falha ao atualizar."))
-      .finally(() => {
-        setLoading(false);
-        setToUpdate(null);
-      });
-  }, [toUpdate, cadastroTable]);
-
-  // 5) insert
-  useEffect(() => {
-    if (!toInsert) return;
-    setLoading(true);
-    axios
-      .post("http://localhost:5000/api/insert", { table: cadastroTable, data: toInsert })
-      .then(() => axios.get("http://localhost:5000/api/select", { params: { table: cadastroTable } }))
-      .then((res) => setRows(res.data))
-      .catch(() => setError("Falha ao inserir."))
-      .finally(() => {
-        setLoading(false);
-        setToInsert(null);
-      });
-  }, [toInsert, cadastroTable]);
-
-  // Filtra rows por searchTerm
   const filteredRows = useMemo(() => {
     if (!searchTerm) return rows;
     const term = searchTerm.toLowerCase();
-    return rows.filter((row) =>
-      Object.values(row).some((val) =>
-        String(val).toLowerCase().includes(term)
-      )
+    return rows.filter(row =>
+      Object.values(row).some(val => String(val).toLowerCase().includes(term))
     );
   }, [rows, searchTerm]);
 
   return (
-    <div className="flex flex-col m-12 p-24">
-      <h1 className="text-center text-3xl font-bold text-black">Cadastro de Divida</h1>
-      <div className="flex justify-between items-center flex-wrap w-full h-full mb-10">
-        <div className="flex flex-row w-[20rem] gap-2">
-          <Select className="flex w-[10rem] h-full"/>
-          <Button type="primary">Todos</Button>
-          <Button type="primary" color="danger">Ativos</Button>
+    <div className="flex flex-col items-center w-screen min-h-screen bg-gray-100 p-28">
+      <div className="bg-white w-full max-w-4xl rounded-2xl shadow-lg p-8 space-y-6">
+        <h1 className="text-3xl font-bold text-center">Cadastro de Dívida</h1>
+
+        {/* Controles de seleção e filtros */}
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div className="flex items-center space-x-2 gap-2">
+            <Select
+              className="w-48"
+              placeholder="Selecione tabela"
+              options={tabelas}
+              value={cadastroTable}
+              onChange={setCadastroTable}
+            />
+            <button className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors">
+              All
+            </button>
+            <button className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+              Online
+            </button>
+          </div>
+          <button className="flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
+            <PlusOutlined className="mr-2" /> Adicionar
+          </button>
         </div>
-        <Button type="primary" color="danger">Adicionar</Button>
-      </div>
-      <input type="text" className="border-2 border-neutral-400 outline-none focus:border-blue-300 rounded-sm px-2" placeholder="Pesquisar..."/>
-      <div>
-        
+
+        {/* Campo de pesquisa */}
+        <input
+          type="text"
+          placeholder="Pesquisar..."
+          value={searchTerm}
+          onChange={e => setSearchTerm(e.target.value)}
+          className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+        />
+
+        {/* Lista de registros */}
+        <div className="space-y-4">
+          {filteredRows.map(row => (
+            <div
+              key={row.id}
+              className="flex justify-between items-center bg-gray-800 p-4 rounded-lg"
+            >
+              <div>
+                <p className="text-sm font-semibold text-white uppercase">{row.status}</p>
+                <p className="text-gray-300">multa: {row.multa}</p>
+              </div>
+              <div className="flex items-center space-x-4">
+                <EditOutlined className="text-gray-400 hover:text-white cursor-pointer" />
+                <DeleteOutlined className="text-gray-400 hover:text-white cursor-pointer" />
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

@@ -6,9 +6,11 @@ import { Layout } from './pages/Layout';
 import { PaginaLogin } from './pages/PaginaLogin';
 import { Home } from './pages/Home';
 import { Erro404 } from './pages/Erro404';
-import { Cadastro } from './pages/Cadastro';
 import { DetalhesLivro } from './pages/DetalhesLivro';
-import { Emprestimos } from './pages/Emprestimos';
+import { CadastroUsuario } from './pages/CadastroUsuario';
+import { CadastroLivro } from './pages/CadastroLivro';
+import { Historico } from './pages/Historico';
+import { Cadastro } from './pages/Cadastro';
 
 
 export function App() {
@@ -21,8 +23,10 @@ export function App() {
           {/* Rota de login */}
           <Route path="login" element={<PaginaLogin />} />
           <Route path="cadastro" element={< Cadastro/>} />
+          <Route path="cadastrousuario" element={< CadastroUsuario/>} />
+          <Route path="cadastrolivro" element={< CadastroLivro/>} />
           <Route path="livro/:id" element={< DetalhesLivro/>} />
-          <Route path="emprestimos/:usuarioId" element={< Emprestimos/>} />
+          <Route path="historico" element={< Historico/>} />
         
           {/* Redirecionamento - agora faz sentido pois temos uma rota "/" */}
           <Route path="inicio" element={<Navigate to="/" replace />} />

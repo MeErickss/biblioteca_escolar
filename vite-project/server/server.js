@@ -219,7 +219,7 @@ app.get('/api/select', async (req, res) => {
     cargo:      'SELECT * FROM cargo;',
     categoria:  'SELECT * FROM categoria;',
     curso:      'SELECT * FROM curso;',
-    divida:     'SELECT * FROM divida;',
+    divida:     'SELECT d.id AS id_divida, d.atraso, d.status, d.multa, d.data_geracao, d.data_pagamento, e.id AS id_emprestimo, e.data_emprestimo, e.data_devolucao_prevista, l.id AS id_usuario, l.nome, l.email FROM divida d LEFT JOIN emprestimo e ON e.id = d.id_emprestimo LEFT JOIN locatorio l ON l.id = e.id_usuario;',
     editora:    'SELECT * FROM editora;',
     emprestimo: 'SELECT * FROM emprestimo;',
     livro:      "SELECT *,EXTRACT(YEAR FROM l.datapublicacao)::INT AS ano, COALESCE(c.descricao, '') AS categoria FROM livro l LEFT JOIN categoria c ON c.id = l.id_categoria;",
@@ -227,6 +227,7 @@ app.get('/api/select', async (req, res) => {
     subcategoria: 'SELECT * FROM subcategoria;',
     populares:  'SELECT * FROM livro l WHERE id < 10;',
   };
+
 
   // 2) Queries que aceitam filtro (exemplo aqui puxa categoria por descrição)
   const parametrizadas = {

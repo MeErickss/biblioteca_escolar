@@ -20,7 +20,7 @@ export function Header() {
           {localStorage.getItem('login') ? (
             <>
               <div className="flex flex-row gap-8 items-center">
-                <NavLink to={`/emprestimos/${localStorage.getItem('idLogin')}`} className="cursor-pointer">
+                <NavLink to="/historico" className="cursor-pointer">
                   <HistoryOutlined style={{ fontSize: '40px' }} />
                 </NavLink>
 
