@@ -24,11 +24,13 @@ export function DetalhesLivro() {
         // dados do livro
         const resp = await axios.get(`http://localhost:5000/api/livro/${id}`);
         setLivro(resp.data);
+        console.log(resp.data)
 
         // livros relacionados (mesma categoria ou qualquer lógica sua)
         const rel = await axios.get(`http://localhost:5000/api/select`, {
           params: { table: "livro" }
         });
+        console.log(rel.data)
         setRelated(rel.data);
       } catch (err) {
         console.error(err);
@@ -96,7 +98,7 @@ export function DetalhesLivro() {
                       <BookCover
                         isbn={item.isbn}
                         alt={`Capa de ${item.titulo}`}
-                        className="w-[12rem] h-[16rem] object-cover mb-4 rounded"
+                        className="w-[12rem] cursor-pointer h-[16rem] object-cover mb-4 rounded"
                       />
                     </button>
 

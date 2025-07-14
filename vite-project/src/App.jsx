@@ -23,8 +23,11 @@ export function App() {
           {/* Rota de login */}
           <Route path="login" element={<PaginaLogin />} />
           <Route path="cadastro" element={< Cadastro/>} />
-          <Route path="cadastrousuario" element={< CadastroUsuario/>} />
-          <Route path="cadastrolivro" element={< CadastroLivro/>} />
+          <Route path="cadastrousuario" element={<CadastroUsuario />} />
+          <Route path="cadastrousuario/:id" element={<CadastroUsuario />} />
+          {/* rota dinâmica de cadastro / edição de livro */}
+          <Route path="cadastrolivro" element={<CadastroLivro />} />
+          <Route path="cadastrolivro/:id" element={<CadastroLivro />} />
           <Route path="livro/:id" element={< DetalhesLivro/>} />
           <Route path="historico" element={< Historico/>} />
         

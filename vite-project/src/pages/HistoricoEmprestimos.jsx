@@ -39,6 +39,24 @@ export function HistoricoEmprestimos() {
     );
   }
 
+  const handleDevolver = async (id) => {
+  try {
+    // mandamos status e data_devolucao
+    await axios.put('http://localhost:5000/api/update', {
+      table: 'emprestimo',
+      data: {
+        id,
+        status: 'CONCLUIDO',                        // ou 'DEVOLVIDO', como preferir
+        data_devolucao: new Date().toISOString().split('T')[0] // só a data YYYY‑MM‑DD
+      }
+    });
+  } catch (err) {
+    console.error('Erro ao devolver:', err);
+  } finally{
+    window.location.reload()
+  }
+};
+
   return (
     <div className="flex flex-col items-center w-screen bg-gray-100 p-28">
       <div className="w-full max-w-5xl bg-white rounded-2xl shadow-lg p-6 space-y-6">
@@ -94,7 +112,7 @@ export function HistoricoEmprestimos() {
                   }`}>{e.status}</span>
                 </div>
                 {e.status != 'Devolvido' && <div>
-                  <button className='inline-block p-2 text-sm font-medium rounded-lg bg-indigo-500 text-white'>Devolver</button>
+                  <button onClick={() => handleDevolver(e.id)} className='inline-block p-2 text-sm cursor-pointer font-medium rounded-lg bg-indigo-500 text-white'>Devolver</button>
                 </div>}
               </div>
             ))}

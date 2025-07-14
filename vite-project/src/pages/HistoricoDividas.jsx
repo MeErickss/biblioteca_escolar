@@ -11,15 +11,17 @@ export function HistoricoDividas() {
   useEffect(() => {
     axios
       .get('http://localhost:5000/api/select', { params: { table: 'divida' } })
-      .then(res => setDividas(res.data))
+      .then(res => {setDividas(res.data); console.log(res.data)})
       .catch(() => setError('Não foi possível carregar as dívidas.'))
       .finally(() => setLoading(false));
   }, []);
+
 
   // Filtra dívidas com base no termo de busca
   const filteredDividas = useMemo(() => {
     const term = searchTerm.toLowerCase();
     return dividas.filter(div =>
+      console.log(div) ||
       div.nome.toLowerCase().includes(term) ||
       div.id_emprestimo.toString().includes(term) ||
       div.status.toLowerCase().includes(term) ||
@@ -53,13 +55,12 @@ export function HistoricoDividas() {
         </div>
 
         {/* Cabeçalho grid */}
-        <div className="grid grid-cols-6 gap-4 text-sm font-medium text-gray-700 border-b border-gray-200 pb-2">
+        <div className="grid grid-cols-5 gap-4 text-sm font-medium text-gray-700 border-b border-gray-200 pb-2">
           <div>Usuário</div>
           <div>Atraso</div>
           <div>Status</div>
           <div>Multa</div>
           <div>Data Geração</div>
-          <div>Data Prevista</div>
         </div>
 
         {/* Linhas */}
@@ -76,14 +77,13 @@ export function HistoricoDividas() {
             {filteredDividas.map(div => (
               <div
                 key={div.id}
-                className="grid grid-cols-6 gap-4 items-center bg-white p-3 rounded-lg shadow-sm hover:bg-gray-50"
+                className="grid grid-cols-5 gap-4 items-center bg-white p-3 rounded-lg shadow-sm hover:bg-gray-50"
               >
                 <div className="text-gray-600 text-sm">{div.nome}</div>
                 <div className="text-gray-600 text-sm">{`${div.atraso} dias`}</div>
                 <div className="text-gray-800 text-sm font-semibold uppercase border-b-2 border-orange-400 w-1/2">{div.status}</div>
                 <div className="text-gray-600 text-sm border-b-2 border-green-400 w-1/2">{`${div.multa} R$`}</div>
                 <div className="text-gray-600 text-sm">{new Date(div.data_geracao).toLocaleString()}</div>
-                <div className="text-gray-600 text-sm">{new Date(div.data_devolucao_prevista).toLocaleString()}</div>
               </div>
             ))}
           </div>

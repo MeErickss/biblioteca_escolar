@@ -128,49 +128,11 @@ app.get('/api/emprestimos', async (req, res) => {
   }
 });
 
-
-app.get('/api/emprestimos/:locatorioId', async (req, res) => {
-  const { locatorioId } = req.params;
-
-  const sql = `
-    SELECT
-      e.id                                               AS id,
-      l.titulo                                           AS livro,
-      to_char(e.data_emprestimo,         'DD/MM/YYYY')   AS dataEmprestimo,
-      to_char(e.data_devolucao_prevista, 'DD/MM/YYYY')   AS dataDevolucaoPrevista,
-      to_char(e.data_devolucao,          'DD/MM/YYYY')   AS dataDevolucaoReal,
-      CASE
-        WHEN e.status = 'ATIVO'     THEN 'Em andamento'
-        WHEN e.status = 'ATRASADO'  THEN 'Atrasado'
-        WHEN e.status = 'CONCLUIDO' THEN 'Devolvido'
-        ELSE e.status::text
-      END                                               AS status,
-      dv.atraso                                          AS diasAtraso,
-      dv.multa                                           AS valorMulta
-    FROM emprestimo e
-    JOIN livro     l    ON e.id_livro     = l.id
-    JOIN locatorio loc  ON e.id_usuario   = loc.id
-    LEFT JOIN divida  dv   ON dv.id_emprestimo = e.id
-    WHERE e.id_usuario = $1
-    ORDER BY e.data_emprestimo DESC;
-  `;
-
-  try {
-    const { rows } = await pool.query(sql, [locatorioId]);
-    return res.json(rows);
-  } catch (err) {
-    console.error('Erro ao buscar histórico de empréstimos:', err);
-    return res.status(500).json({ error: 'Erro ao buscar empréstimos' });
-  }
-});
-
 app.post('/api/recommend', async (req, res) => {
   const { prompt } = req.body;
   if (!prompt) {
     return res.status(400).json({ error: 'Campo "prompt" é obrigatório.' });
   }
-
-  console.log(process.env.HF_TOKEN)
 
   try {
     const hfResponse = await fetch(
@@ -219,15 +181,27 @@ app.get('/api/select', async (req, res) => {
     cargo:      'SELECT * FROM cargo;',
     categoria:  'SELECT * FROM categoria;',
     curso:      'SELECT * FROM curso;',
-    divida:     'SELECT d.id AS id_divida, d.atraso, d.status, d.multa, d.data_geracao, d.data_pagamento, e.id AS id_emprestimo, e.data_emprestimo, e.data_devolucao_prevista, l.id AS id_usuario, l.nome, l.email FROM divida d LEFT JOIN emprestimo e ON e.id = d.id_emprestimo LEFT JOIN locatorio l ON l.id = e.id_usuario;',
+    divida: `
+      SELECT 
+        d.*,
+        l.nome
+      FROM divida d
+      LEFT JOIN emprestimo e
+        ON d.id_emprestimo = e.id
+      LEFT JOIN locatorio l
+        ON e.id_usuario = l.id
+      ORDER BY d.id;`,
     editora:    'SELECT * FROM editora;',
     emprestimo: 'SELECT * FROM emprestimo;',
-    livro:      "SELECT *,EXTRACT(YEAR FROM l.datapublicacao)::INT AS ano, COALESCE(c.descricao, '') AS categoria FROM livro l LEFT JOIN categoria c ON c.id = l.id_categoria;",
+    livro:      "SELECT * FROM livro ORDER BY titulo ASC;",
     locatorio:  'SELECT * FROM locatorio;',
     subcategoria: 'SELECT * FROM subcategoria;',
     populares:  'SELECT * FROM livro l WHERE id < 10;',
+    config_limite_emprestimo:  'SELECT * FROM config_limite_emprestimo;',
+    livro_editora:  'SELECT * FROM livro_editora;',
+    livro_autor:  'SELECT * FROM livro_autor;',
+    locatorio_curso:  'SELECT * FROM locatorio_curso;'
   };
-
 
   // 2) Queries que aceitam filtro (exemplo aqui puxa categoria por descrição)
   const parametrizadas = {
